@@ -10,6 +10,7 @@ In chronological order:
  - [Thoughts on train back from Web3 (Oct)](https://gist.github.com/liamzebedee/c1bb4f79b67b3e7a39215b7ac3a80771)
  - [Economic Leverage & Personal Currency, DAO's, Climate Change vehicle (Oct)](https://slides.com/liamzebedee/retrust)
  - [Background - Part 1 (Oct)](https://medium.com/@liamzebedee/deriving-a-reliable-trust-protocol-that-scales-to-the-planet-pt-1-d994835cb008)
+ - [Simulations of trust flow algorithms (Nov)](https://colab.research.google.com/drive/1BITXYa-b8BOwmrKh0czSUzQVeOdTc0Uj)
 
 ### Misc
  - https://twitter.com/santisiri/status/1058016864180359173
