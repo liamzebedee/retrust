@@ -6,7 +6,7 @@ For Alec - WIP.
 ## Resources
 In chronological order:
 
- - Software to build example graphs/networks for algorithmic experimentation (better than Gephi - can make more than one edge) [repo](https://stackblitz.com/edit/visualgraph-editor) [live](https://visualgraph-editor.stackblitz.io/)
+ - Software to build example graphs/networks for algorithmic experimentation (better than Gephi - can make more than one edge ie. a Multigraph) [repo](https://stackblitz.com/edit/visualgraph-editor) [live](https://visualgraph-editor.stackblitz.io/)
  - [Thoughts on train back from Web3 (Oct)](https://gist.github.com/liamzebedee/c1bb4f79b67b3e7a39215b7ac3a80771)
  - [Economic Leverage & Personal Currency, DAO's, Climate Change vehicle (Oct)](https://slides.com/liamzebedee/retrust)
  - [Background - Part 1 (Oct)](https://medium.com/@liamzebedee/deriving-a-reliable-trust-protocol-that-scales-to-the-planet-pt-1-d994835cb008)
