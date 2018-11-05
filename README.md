@@ -27,4 +27,4 @@ In chronological order:
  - Electronic Voting
  - scalable personal currency https://www.joincircles.net/
  - citizen's economic leverage
- - generic reputation without middlemen (Swarm city)
+ - generic reputation without middlemen - Swarm City, Colony, Augur
