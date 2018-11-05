@@ -3,7 +3,7 @@ retrust
 
 For Alec - WIP.
 
-## Resources
+## Development
 In chronological order:
 
  - Software to build example graphs/networks for algorithmic experimentation (better than Gephi - can make more than one edge ie. a Multigraph) [repo](https://stackblitz.com/edit/visualgraph-editor) [live](https://visualgraph-editor.stackblitz.io/)
@@ -12,8 +12,18 @@ In chronological order:
  - [Background - Part 1 (Oct)](https://medium.com/@liamzebedee/deriving-a-reliable-trust-protocol-that-scales-to-the-planet-pt-1-d994835cb008)
  - [Simulations of trust flow algorithms (Nov)](https://colab.research.google.com/drive/1BITXYa-b8BOwmrKh0czSUzQVeOdTc0Uj)
 
-### Misc
- - https://twitter.com/santisiri/status/1058016864180359173
- - Sybil control using economic stake mechanisms in Bitcoin, from the inventor of Ethereum [Vitalik](https://www.reddit.com/r/btc/comments/9szwi4/happy_whitepaper_day_xd/e8xxf4g/?utm_content=permalink&utm_medium=front&utm_source=reddit&utm_name=btc): I truly do love the whitepaper! It's a great document and does an awesome job of presenting the core ideas that matter in nine easy to read pages, something that most academic papers absolutely fail at. And the idea itself contained multiple fundamental innovations (chain-based consensus and, more importantly, the use of economic resources for the dual functions of incentivization and sybil control in distributed systems) that have transformed the field.
+## Resources
+ - “decentralized sybil resistant identity” at Devcon4. Read the [reputation jam tweetstorm](https://twitter.com/sinahab/status/1027640621110984704)
+ - [Identity and reputation in Web3](https://sinahab.com/2018/09/identity-and-reputation-in-web-3/)
+ - Sybil control using economic stake mechanisms in Bitcoin, from the inventor of Ethereum [Vitalik](https://www.reddit.com/r/btc/comments/9szwi4/happy_whitepaper_day_xd/e8xxf4g/?utm_content=permalink&utm_medium=front&utm_source=reddit&utm_name=btc): ...the idea itself contained multiple fundamental innovations (chain-based consensus and, more importantly, the use of economic resources for the dual functions of incentivization and sybil control in distributed systems) that have transformed the field.
  - https://en.wikipedia.org/wiki/Betweenness_centrality
  - Subjective logic has problems with the communicativity of its operators. EBSL looks good ([Flow-based reputation with uncertainty](https://arxiv.org/pdf/1402.3319.pdf))
+
+### Applications
+ - Proof of personhood https://github.com/protocol/research/issues/11
+ - A Universal Basic Income token, in which every unique individual who registers receives some amount of tokens.
+ - A secure and anonymous method of tracking unique visitors or users
+ - Electronic Voting
+ - scalable personal currency https://www.joincircles.net/
+ - citizen's economic leverage
+ - generic reputation without middlemen (Swarm city)
