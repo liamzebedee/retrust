@@ -3,7 +3,7 @@ retrust
 
 For Alec - WIP.
 
-## Development
+## Developments
 In chronological order:
 
  - Software to build example graphs/networks for algorithmic experimentation (better than Gephi - can make more than one edge ie. a Multigraph) [repo](https://stackblitz.com/edit/visualgraph-editor) [live](https://visualgraph-editor.stackblitz.io/)
@@ -11,6 +11,7 @@ In chronological order:
  - [Economic Leverage & Personal Currency, DAO's, Climate Change vehicle (Oct)](https://slides.com/liamzebedee/retrust)
  - [Background - Part 1 (Oct)](https://medium.com/@liamzebedee/deriving-a-reliable-trust-protocol-that-scales-to-the-planet-pt-1-d994835cb008)
  - [Simulations of trust flow algorithms (Nov)](https://colab.research.google.com/drive/1BITXYa-b8BOwmrKh0czSUzQVeOdTc0Uj)
+ - [EBSL source (Nov](https://gist.github.com/liamzebedee/1f5c56d656ceba808a2e99e78e9f6160)
 
 ## Resources
  - “decentralized sybil resistant identity” at Devcon4. Read the [reputation jam tweetstorm](https://twitter.com/sinahab/status/1027640621110984704)
