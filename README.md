@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-retrust
-=======
 
 For Alec - WIP.
 
@@ -31,4 +28,3 @@ In chronological order:
  - generic reputation without middlemen - Swarm City, Colony, Augur
 =======
 curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
->>>>>>> First commit
