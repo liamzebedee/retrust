@@ -1,0 +1,6 @@
+.vscode
+*png
+data.txt
+output-conv.txt
+output-init.txt
+*pyc
