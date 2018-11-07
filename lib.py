@@ -3,6 +3,7 @@ import math
 import string
 import operator
 from optparse import OptionParser
+from functools import reduce
 
 def load_data(filename):
 	# This procedure loads relevant data into table T.
@@ -16,7 +17,7 @@ def load_data(filename):
 	file.readline()
 	# Assumed is that data set consists of 5 entries each row, where first and last entries are irrelevant. 
 	for line in file:
-		tmp = string.split(line, separator)
+		tmp = line.split(separator)
 		T.append( [int(i) for i in tmp[1:-1] ])
 	return T
 
@@ -29,7 +30,7 @@ def get_theta(data):
 
 def get_evidence(data):
 	# This procedure computes amount of positive and negative evidences only
-	print "get evidence..."
+	print("get evidence...")
 	y = get_max([[data[i][j] for i in range(len(data))] for j in range(2)])
 	Flow = [[[0,0] for i in range(y[0]+1)] for j in range(y[1]+1)]
 
@@ -40,12 +41,12 @@ def get_evidence(data):
 		else:
 			Flow[row[0]][row[1]][1] += -1*val
 	
-	print "finished"
+	print("finished")
 	return Flow
 
 def get_opinion(data, constant):
 	# first extract evidences from dataset 
-	print "get evidence..."
+	print("get evidence...")
 	y = get_max([[data[i][j] for i in range(len(data))] for j in range(2)])
 	Flow = [[[0,0,constant] for i in range(y[0]+1)] for j in range(y[1]+1)]
 
@@ -58,10 +59,10 @@ def get_opinion(data, constant):
 			# add negative evidence
 			Flow[row[0]][row[1]][1] += -1*val
 	
-	print "finished"
+	print("finished")
 
 	# Given evidence compute Evidence Based Opinions using uncertainty constant
-	print "extract opinions..."	
+	print("extract opinions...")	
 	for i in range(len(Flow)):
 		for j in range(len(Flow)):
 			el = Flow[i][j]
@@ -69,17 +70,17 @@ def get_opinion(data, constant):
 			Flow[i][j][0] = float(el[0])/ev_sum_el
 			Flow[i][j][1] = float(el[1])/ev_sum_el
 			Flow[i][j][2] = float(el[2])/ev_sum_el
-	print "finished"
+	print("finished")
 	return Flow
 		
 def test_flow(flow):
 	# Test for entries in flow, that have both positiev and negative evidence
-	print "test for both neg and pos evidence"
+	print("test for both neg and pos evidence")
 	for row in flow:
 		for el in row:
 			if (el[0]!=0) and (el[1]!=0):
-				print el
-	print "test finished"
+				print(el)
+	print("test finished")
 
 def otimes(ox, oy):
 	# compute SL opinion x otimes opinion y
@@ -88,12 +89,12 @@ def otimes(ox, oy):
 def oplus(ox, oy):
 	# compute SL opinion x oplus opinion y
 	div = ox[2]+oy[2]-ox[2]*oy[2]
-	return map(lambda x: x/div, [ox[2]*oy[0]+oy[2]*ox[0], ox[2]*oy[1]+oy[2]*ox[1], ox[2]*oy[2]])
+	return [x/div for x in [ox[2]*oy[0]+oy[2]*ox[0], ox[2]*oy[1]+oy[2]*ox[1], ox[2]*oy[2]]]
 
 def scalartimes(scalar, ox):
 	# comput scalar mul
 	div = scalar*(ox[0]+ox[1])+ox[2]
-	return map(lambda x: x/div, [scalar*ox[0], scalar*ox[1], ox[2]])
+	return [x/div for x in [scalar*ox[0], scalar*ox[1], ox[2]]]
 
 def boxtimes(ox, oy, func):
 	#compute opinion x boxtimes opinion y given g(x) = func 
@@ -108,16 +109,16 @@ def matrixtimes(A, B, plus=operator.add, times=operator.mul):
 	# compute A.B using own functions for plus and mul
 	# Default plus = +
 	# Default mul = *
-	return [[reduce(plus, map(times, A[i], [B[k][j] for k in range(len(B[0]))])) for j in range(len(B))] for i in range(len(A))]
+	return [[reduce(plus, list(map(times, A[i], [B[k][j] for k in range(len(B[0]))]))) for j in range(len(B))] for i in range(len(A))]
 	
 def matrixsquare(A, plus=operator.add, times=operator.mul):
 	# compute A^2 using own functions for plus and mul
 	# Default plus = +
 	# Default mul = *
-	return [[reduce(plus, map(times, A[i], [A[j][k] for k in range(len(A))])) for i in range(len(A))] for j in range(len(A))]
+	return [[reduce(plus, list(map(times, A[i], [A[j][k] for k in range(len(A))]))) for i in range(len(A))] for j in range(len(A))]
 	
 def matrixplus(A, B, plus=operator.add):
-	return [map(plus, A[i],B[i]) for i in range(len(A))]
+	return [list(map(plus, A[i],B[i])) for i in range(len(A))]
 
 def matrixgeo(A, pow, plus=operator.add, times=operator.mul):
 	# compute A^pow using own functions for plus and mul
