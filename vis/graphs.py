@@ -7,6 +7,8 @@ import networkx as nx
 from networkx.drawing.nx_agraph import graphviz_layout
 from networkx.drawing.nx_agraph import read_dot
 
+from pygraphviz import *
+
 import os
 
 def file_without_ext(fname):
@@ -19,20 +21,26 @@ class graph():
 
         with open(path, 'r') as f:
             self.G = read_dot(f)
+            self.AGraph = AGraph(path)
             # print(self.G.edges())
-        self.render_dot(self.G)
+        self.render_dot(self.G, self.AGraph)
         self.render_heatmap(self.G)
 
-    def render_dot(self, G):
-        plt.figure()
+    def render_dot(self, G, AGraph):
+        AGraph.draw(
+            f'networks/{self.name}.network-structure.png',
+            format='png',
+            prog='dot'
+        )
+        # plt.figure()
 
-        pos = graphviz_layout(G)
-        nx.draw(G, pos=pos, node_size=1600, cmap=plt.cm.Blues,
-        #         node_color=range(len(G)),
-                prog='dot')
-        labels = nx.draw_networkx_labels(G, pos, font_color='black')
-        plt.title('Trust network')
-        plt.savefig(f'networks/{self.name}.network-structure.png')
+        # pos = graphviz_layout(G)
+        # nx.draw(G, pos=pos, node_size=1600, cmap=plt.cm.Blues,
+        # #         node_color=range(len(G)),
+        #         prog='dot')
+        # labels = nx.draw_networkx_labels(G, pos, font_color='black')
+        # plt.title('Trust network')
+        # plt.savefig(f'networks/{self.name}.network-structure.png')
 
     def render_heatmap(self, G):
         def draw(G, pos, measures, measure_name):
