@@ -18,13 +18,15 @@ class graph():
     def __init__(self, path):
         self.path = path
         self.name = file_without_ext(path)
-
         with open(path, 'r') as f:
             self.G = read_dot(f)
             self.AGraph = AGraph(path)
             # print(self.G.edges())
         self.render_dot(self.G, self.AGraph)
         self.render_heatmap(self.G)
+
+    def interactions_list_to_graphs(self):
+        
 
     def render_dot(self, G, AGraph):
         AGraph.draw(

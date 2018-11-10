@@ -194,28 +194,11 @@ def matrixgeoconvtest(A, threshold, plus=operator.add, times=operator.mul):
 		t = distance(Y , R)
 	return R, count, t
 
-# def finalfunctrust_converge(T, R, threshold, plus=operator.add, times=operator.mul):
-# 	# Default plus = +
-# 	# Default mul = *
-# 	# Set diagonal to zero.
-# 	t = threshold + 1.0
-	
-#     F = T
-# 	count = 0
-# 	while (t > threshold and count < 100):
-# 		count = count + 1
-		
-#         # Y = R
-        
-#         # R = A + fixedpoint(R * A)
-        
-#         # F = T + fixedpoint(R * T)
 
-# 		F = matrixplus(A, matrixtimes(R, A, plus, times), plus)
-# 		for j in range(len(R)):
-# 			R[j][j] = [0.0, 0.0, 1.0]
-# 		t = distance(Y , R)
-# 	return R, count, t
+
+# def roundopinion(ox, digits):
+# 	rnd = lambda x: round(x*(10**digits))/(10**digits)
+# 	return list(map(rnd, ox))
 
 def extract_evidence(M, constant):
 	return [[[constant*(M[i][j][0]/M[i][j][2]), constant*(M[i][j][1]/M[i][j][2])] for j in range(len(M[i]))] for i in range(len(M))]

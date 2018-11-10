@@ -8,17 +8,6 @@ from lib import otimes, oplus, odot, scalartimes, boxtimes, matrixtimes, matrixp
 import json
 
 
-def roundopinion(ox, digits):
-	rnd = lambda x: round(x*(10**digits))/(10**digits)
-	return list(map(rnd, ox))
-
-def distance(m1, m2):
-	res = 0.0
-	for i in range(len(m1)):
-		for j in range(len(m1)):
-			for k in range(3):
-				res += abs(m1[i][j][k] - m2[i][j][k])
-	return res
 	
 parser = OptionParser()
 parser.add_option("-o", "--outputfile",

@@ -12,7 +12,3 @@ python gen.py:
         build trust graph
         render_trust(f) -> networks/{id}/trust.jpg
     
-
-
-```
-```
