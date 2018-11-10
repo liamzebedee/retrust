@@ -4,3 +4,5 @@ data.txt
 output-conv.txt
 output-init.txt
 *pyc
+node_modules
+__pycache__

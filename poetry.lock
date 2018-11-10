@@ -109,7 +109,7 @@ python-versions = "*"
 version = "1.11.0"
 
 [metadata]
-content-hash = "9812e3c28de8034623464be5f118bcd8f71f5c50ed8bbf87adf14ebfe5c35cea"
+content-hash = "e07c5af40f13dfcf3bae59cf9bd55a37dd6db89c7af965c88720b15d570b8c18"
 python-versions = "3.7"
 
 [metadata.hashes]
