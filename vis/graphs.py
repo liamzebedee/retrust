@@ -23,7 +23,7 @@ class graph():
         self.name = file_without_ext(path)
         # reads .interactions
         with open(path, 'r') as f:
-            self.interactions_list_to_graphs(f.read())
+            self.G = self.interactions_list_to_graphs(f.read())
             # self.G = read_dot(f)
             # self.AGraph = AGraph(path)
             # print(self.G.edges())
@@ -32,7 +32,7 @@ class graph():
             json.dump(self.evidence, f)
         with open(f'networks/{self.name}.opinions.json', 'w') as f:
             json.dump(self.opinions, f)
-        
+        self.render_trust(self.evidence, self.interactions, self.G)
         self.render_dot(self.G, self.G)
         self.render_heatmap(self.G)
 
@@ -48,9 +48,46 @@ class graph():
         for from_, to, _ in interactions:
             G.add_edge(from_, to)
         
-        self.G = G
+        return G
     
-    # def render_trustmap(self, G):
+    def render_trust(self, evidence, interactions, G):
+        pos = nx.spring_layout(G)
+
+        for i, node_view in enumerate(self.evidence):
+            node_id = i
+            
+            # evidence
+            # colour nodes by the amount of evidence they have
+            evidence_totals = []
+            for j, other in enumerate(self.evidence[i]):
+                posit, negat = self.evidence[i][j]
+                total = posit - negat
+                evidence_totals.append(total)
+            
+            # RdYlBu
+            cmap = plt.get_cmap('RdYlBu')
+            node_color = evidence_totals
+            print(G.nodes())
+            print(node_color)
+
+            plt.figure()
+            nodes = nx.draw_networkx_nodes(
+                G, 
+                pos=pos,
+                node_size=250,
+                cmap=cmap, 
+                node_color=node_color, 
+                # nodelist=list(measures.keys())
+            )
+            
+            labels = nx.draw_networkx_labels(G, pos, font_color='white')
+            edges = nx.draw_networkx_edges(G, pos)
+
+            plt.title(f"Evidence map for node {node_id}")
+            plt.colorbar(nodes)
+            plt.axis('off')
+            # plt.show()
+            plt.savefig(f'networks/{self.name}.{node_id}.evidence.png')
 
 
     def render_dot(self, G, AGraph):
