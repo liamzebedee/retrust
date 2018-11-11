@@ -4,12 +4,15 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as mcolors
 
 import networkx as nx
-from networkx.drawing.nx_agraph import graphviz_layout
-from networkx.drawing.nx_agraph import read_dot
+from networkx.drawing.nx_agraph import graphviz_layout, to_agraph
+from networkx.drawing.nx_agraph import read_dot, write_dot
 
 from pygraphviz import *
 
 import os
+import json
+
+from trust.calc import converge_worldview
 
 def file_without_ext(fname):
     return os.path.splitext(os.path.basename(fname))[0]
@@ -18,18 +21,40 @@ class graph():
     def __init__(self, path):
         self.path = path
         self.name = file_without_ext(path)
+        # reads .interactions
         with open(path, 'r') as f:
-            self.G = read_dot(f)
-            self.AGraph = AGraph(path)
+            self.interactions_list_to_graphs(f.read())
+            # self.G = read_dot(f)
+            # self.AGraph = AGraph(path)
             # print(self.G.edges())
-        self.render_dot(self.G, self.AGraph)
+        self.opinions, self.evidence = converge_worldview(self.interactions)
+        with open(f'networks/{self.name}.evidence.json', 'w') as f:
+            json.dump(self.evidence, f)
+        with open(f'networks/{self.name}.opinions.json', 'w') as f:
+            json.dump(self.opinions, f)
+        
+        self.render_dot(self.G, self.G)
         self.render_heatmap(self.G)
 
-    def interactions_list_to_graphs(self):
+    def interactions_list_to_graphs(self, txt):
+        interactions = []
+        for line in txt.split('\n'):
+            interactions.append([
+                int(i) for i in line.split(' ')
+            ])
+        self.interactions = interactions
+
+        G = nx.MultiDiGraph()
+        for from_, to, _ in interactions:
+            G.add_edge(from_, to)
         
+        self.G = G
+    
+    # def render_trustmap(self, G):
+
 
     def render_dot(self, G, AGraph):
-        AGraph.draw(
+        to_agraph(G).draw(
             f'networks/{self.name}.network-structure.png',
             format='png',
             prog='dot'
@@ -46,7 +71,7 @@ class graph():
 
     def render_heatmap(self, G):
         def draw(G, pos, measures, measure_name):
-            print(list(measures.keys()), list(measures.values()))
+            # print(list(measures.keys()), list(measures.values()))
             nodes = nx.draw_networkx_nodes(G, pos, node_size=250, cmap=plt.cm.plasma, 
                                         node_color=list(measures.values()),
                                         nodelist=list(measures.keys())  

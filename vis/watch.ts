@@ -14,7 +14,7 @@ class Watcher {
         
         chokidar.watch(
             // glob.glob("networks/*.txt")
-            path.join('./networks/*.dot')
+            path.join('./networks/*.interactions')
         ).on('all', (event: string, fpath: string) => {
             if(!['change', 'add'].includes(event)) {
                 return;

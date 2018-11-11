@@ -3,8 +3,8 @@ import string
 import operator
 from optparse import OptionParser
 
-from lib import load_data, get_evidence, get_opinion, get_theta, test_flow, write_to_file, extract_evidence, matrixgeoconvtest
-from lib import otimes, oplus, odot, scalartimes, boxtimes, matrixtimes, matrixplus, matrixsquare, matrixpow, matrixgeo, matrixgeonew, func_belief, func_belief_sqrt
+from .lib import load_data, get_evidence, get_opinion, get_theta, test_flow, write_to_file, extract_evidence, matrixgeoconvtest
+from .lib import otimes, oplus, odot, scalartimes, boxtimes, matrixtimes, matrixplus, matrixsquare, matrixpow, matrixgeo, matrixgeonew, func_belief, func_belief_sqrt
 import json
 
 
@@ -17,19 +17,19 @@ uncertainty_constant = 2
 threshold=1.0
 
 
-def set_multiplication_mode(mode, data):
+def get_multiplication_mode(mode, data):
     if mode == 'otimes':
-        times = otimes
+        return otimes
     elif mode == 'boxtimes':
         f = func_belief
-        times = lambda x, y: boxtimes(x, y, f)
+        return lambda x, y: boxtimes(x, y, f)
     elif mode == 'boxtimes2':
         f = func_belief_sqrt
-        times = lambda x, y: boxtimes(x, y, f)
+        return lambda x, y: boxtimes(x, y, f)
     elif mode == 'odot':
         theta = get_theta(data)
         # print("theta = " + str(theta))
-        times = lambda x, y: odot(x, y, theta, uncertainty_constant)	
+        return lambda x, y: odot(x, y, theta, uncertainty_constant)	
 
 
 
@@ -46,7 +46,7 @@ def converge_worldview(interactions):
     # Modes
     # Set plus, times operations with respect to EBSL mode
     plus = oplus
-    times = set_multiplication_mode('odot', data)
+    times = get_multiplication_mode('odot', interactions)
 
     # Convert interaction data into opinion matrix
     P = get_opinion(interactions, uncertainty_constant)
@@ -63,7 +63,7 @@ def converge_worldview(interactions):
     # print("theshold is set to: " + str(options.threshold))
     
     # Converge
-    P2, count, t = matrixgeoconvtest(P, options.threshold, plus, times)
+    P2, count, t = matrixgeoconvtest(P, threshold, plus, times)
 
     # print("Convergence reached at iteration " + str(count))
     # print("write to file: " + options.outputfile)
