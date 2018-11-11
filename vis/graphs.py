@@ -89,7 +89,6 @@ class graph():
             # plt.show()
             plt.savefig(f'networks/{self.name}.{node_id}.evidence.png')
 
-
     def render_dot(self, G, AGraph):
         to_agraph(G).draw(
             f'networks/{self.name}.network-structure.png',
@@ -124,7 +123,7 @@ class graph():
             # plt.show()
             plt.savefig(f'networks/{self.name}.heatmap.png')
 
-        plt.figure(2)
+        plt.figure()
         pos = nx.spring_layout(G)
         draw(G, pos, nx.degree_centrality(G), 'Degree Centrality')
 
