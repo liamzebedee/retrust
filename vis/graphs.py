@@ -14,41 +14,74 @@ import json
 
 from trust.calc import converge_worldview
 
+import numpy as np
+
 def file_without_ext(fname):
     return os.path.splitext(os.path.basename(fname))[0]
+
 
 class graph():
     def __init__(self, path):
         self.path = path
         self.name = file_without_ext(path)
-        # reads .interactions
-        with open(path, 'r') as f:
-            self.G = self.interactions_list_to_graphs(f.read())
-            # self.G = read_dot(f)
-            # self.AGraph = AGraph(path)
-            # print(self.G.edges())
+
+        if path.endswith('.npy'):
+            arr = np.load(path)
+            self.G, self.interactions = self.interactions_np_to_graphs(arr)
+        elif path.endswith('.pickle'):
+            self.interactions = pickle.loads(path)
+            self.G = self.interactions_np_to_graphs(arr)
+        else:
+            # reads .interactions
+            with open(path, 'r') as f:
+                interactions = []
+                for line in f.read().split('\n'):
+                    if line == '':
+                        continue
+                
+                    interactions.append([
+                        int(i) for i in line.split(' ')
+                    ])
+
+                self.interactions = interactions
+                print(self.interactions)
+                
+                self.G = self.interactions_list_to_graphs(self.interactions)
+                
         self.opinions, self.evidence = converge_worldview(self.interactions)
+
         with open(f'networks/{self.name}.evidence.json', 'w') as f:
-            json.dump(self.evidence, f)
+            json.dump(self.evidence, f) 
         with open(f'networks/{self.name}.opinions.json', 'w') as f:
             json.dump(self.opinions, f)
-        self.render_trust(self.evidence, self.interactions, self.G)
-        self.render_dot(self.G, self.G)
-        self.render_heatmap(self.G)
+        # self.render_trust(self.evidence, self.interactions, self.G)
+        # self.render_dot(self.G, self.G)
+        # self.render_heatmap(self.G)
 
-    def interactions_list_to_graphs(self, txt):
+    def interactions_np_to_graphs(self, arr):
+        interactions = np.asarray(arr).tolist()
         interactions = []
-        for line in txt.split('\n'):
+        for (idx, val) in np.ndenumerate(arr):
             interactions.append([
-                int(i) for i in line.split(' ')
+                idx[0],
+                idx[1],
+                val
             ])
-        self.interactions = interactions
+        
+        print(interactions[0])
 
         G = nx.MultiDiGraph()
         for from_, to, _ in interactions:
             G.add_edge(from_, to)
         
-        return G
+        return G, interactions
+    
+    def interactions_list_to_graphs(self, interactions):
+        G = nx.MultiDiGraph()
+        for from_, to, _ in interactions:
+            G.add_edge(from_, to)
+        
+        return G, interactions
     
     def render_trust(self, evidence, interactions, G):
         pos = nx.spring_layout(G)
@@ -65,7 +98,8 @@ class graph():
                 evidence_totals.append(total)
             
             # RdYlBu
-            cmap = plt.get_cmap('RdYlBu')
+            # cmap = plt.get_cmap('RdYlBu')
+            cmap = plt.get_cmap('RdBu_r')
             node_color = evidence_totals
             print(G.nodes())
             print(node_color)

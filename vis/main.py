@@ -13,7 +13,7 @@ def load():
     with open(abspath('./evidence.json'), 'r') as f:
         evidence = json.load(f)
 
-from pathlib import Path
+# from pathlib import Path
 from graphs import graph
 
 import sys

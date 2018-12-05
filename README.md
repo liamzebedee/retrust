@@ -17,6 +17,7 @@ In chronological order:
  - Sybil control using economic stake mechanisms in Bitcoin, from the inventor of Ethereum [Vitalik](https://www.reddit.com/r/btc/comments/9szwi4/happy_whitepaper_day_xd/e8xxf4g/?utm_content=permalink&utm_medium=front&utm_source=reddit&utm_name=btc): ...the idea itself contained multiple fundamental innovations (chain-based consensus and, more importantly, the use of economic resources for the dual functions of incentivization and sybil control in distributed systems) that have transformed the field.
  - Subjective logic has problems with the communicativity of its operators. EBSL looks good ([Flow-based reputation with uncertainty](https://arxiv.org/pdf/1402.3319.pdf))
  - Relative vs. Absolute trust measures. 
+ - https://www.youtube.com/watch?v=ZbgDFXxmNuk
 
 ### Applications
  - Proof of personhood https://github.com/protocol/research/issues/11

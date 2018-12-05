@@ -22,7 +22,7 @@ def load_data(filename):
 	return T
 
 def get_max(data):
-    print(data)
+    # print(data)
     return [max(i) for i in data]
 
 def get_theta(data):
@@ -31,7 +31,10 @@ def get_theta(data):
 def get_evidence(data):
 	# This procedure computes amount of positive and negative evidences only
 	print("get evidence...")
-	y = get_max([[data[i][j] for i in range(len(data))] for j in range(2)])
+	y = get_max([
+			[data[i][j] for i in range(len(data))] 
+			for j in range(2)
+	])
 	Flow = [[[0,0] for i in range(y[0]+1)] for j in range(y[1]+1)]
 
 	for row in data:
@@ -50,6 +53,9 @@ def get_opinion(data, constant):
 	y = get_max([[data[i][j] for i in range(len(data))] for j in range(2)])
 	Flow = [[[0,0,constant] for i in range(y[0]+1)] for j in range(y[1]+1)]
 
+	print("y", y)
+	
+	print("flow", Flow)
 	for row in data:
 		val = row[-1]
 		if val >= 0:
@@ -59,6 +65,7 @@ def get_opinion(data, constant):
 			# add negative evidence
 			Flow[row[0]][row[1]][1] += -1*val
 	
+	print("flow", Flow)
 	print("finished")
 
 	# Given evidence compute Evidence Based Opinions using uncertainty constant
@@ -184,11 +191,13 @@ def matrixgeoconvtest(A, threshold, plus=operator.add, times=operator.mul):
 	# Set diagonal to zero.
 	t = threshold + 1.0
 	R = A
+	print(A)
 	count = 0
 	while (t > threshold and count < 100):
 		count = count + 1
 		Y = R
-		R = matrixplus(A, matrixtimes(R,A, plus, times), plus)
+		print(R[0][0:2])
+		R = matrixplus(A, matrixtimes(R, A, plus, times), plus)
 		for j in range(len(R)):
 			R[j][j] = [0.0, 0.0, 1.0]
 		t = distance(Y , R)

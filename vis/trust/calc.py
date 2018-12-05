@@ -28,6 +28,7 @@ def get_multiplication_mode(mode, data):
         return lambda x, y: boxtimes(x, y, f)
     elif mode == 'odot':
         theta = get_theta(data)
+        print("theta", theta)
         # print("theta = " + str(theta))
         return lambda x, y: odot(x, y, theta, uncertainty_constant)	
 
@@ -42,7 +43,10 @@ def get_multiplication_mode(mode, data):
 # Which is the relative opinion and absolute reputation of every node
 # From the perspective of every other node
 # Returned as (opinions, evidence)
+import numpy as np
+
 def converge_worldview(interactions):
+    # interactions = np.asarray(interactions)
     # Modes
     # Set plus, times operations with respect to EBSL mode
     plus = oplus
