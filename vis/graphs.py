@@ -12,7 +12,8 @@ from pygraphviz import *
 import os
 import json
 
-from trust.calc import converge_worldview
+# from trust.calc import converge_worldview
+from trust2.lib import converge_worldview
 
 import numpy as np
 

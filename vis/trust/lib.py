@@ -50,7 +50,9 @@ def get_evidence(data):
 def get_opinion(data, constant):
 	# first extract evidences from dataset 
 	print("get evidence...")
+	# y: the highest node id
 	y = get_max([[data[i][j] for i in range(len(data))] for j in range(2)])
+	# Flow: setup a matrix of opinions with no belief/disbelief, and uncertainty by the constant
 	Flow = [[[0,0,constant] for i in range(y[0]+1)] for j in range(y[1]+1)]
 
 	print("y", y)
@@ -69,6 +71,7 @@ def get_opinion(data, constant):
 	print("finished")
 
 	# Given evidence compute Evidence Based Opinions using uncertainty constant
+	# NORMALISE everything
 	print("extract opinions...")	
 	for i in range(len(Flow)):
 		for j in range(len(Flow)):
