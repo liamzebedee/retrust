@@ -27,5 +27,3 @@ In chronological order:
  - scalable personal currency https://www.joincircles.net/
  - citizen's economic leverage
  - generic reputation without middlemen - Swarm City, Colony, Augur
-=======
-curl -sSL https://raw.githubusercontent.com/sdispater/poetry/master/get-poetry.py | python
