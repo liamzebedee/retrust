@@ -2,10 +2,11 @@ protocol (b|t)rainstorm
 =======================
 
 *I'd call it a brainstorm, but it happened on the train (again).* 
+
 Description of retrust protocol design - trust, reputation primitive, cryptoeconomic interaction design:
 
  * retrust is a protocol for the exchange of trust and the calculation of reputation attributes
- * consumers of the protocol create bonds of a personal and dapp-specific ERC20 token 
+ * consumers of the protocol create bonds of a personal and dapp-specific ERC20 token
  * apps can incorporate such a token into their user experience to build systems based on worldwide reputation (network effects)
  * users build reputation from interaction with other users through the protocol
  * interaction takes the form of challenge-response staking of trust bonds
@@ -14,7 +15,7 @@ Description of retrust protocol design - trust, reputation primitive, cryptoecon
  * reputation can be used to improve dapp experience wherein users interact with re-liability (the idea of bonds) without the economic cost of issuing a token
 
  * this introduces completely decentralised reputation coordination mechanisms without a third-party, using a blockchain and a reputation convergence algorithm (EBSL)
- * it is sybil-resisant as a result
+ * sybil-resistant notions of digital identity can be built on top of this reputation convergence algorithm
  * for this, all trust bonds must be registered to a decentralised ledger.
 
 
@@ -85,3 +86,43 @@ the intention to supply/demand from the marketplace involves putting trust in ub
 HOWEVER why do we not have transportable reputation? uber is simply only a marketplace. we can look at the reputation of a lyft driver and come to similar terms on its value to us. 
 
 we also place trust in uber to administer the reputation correctly. their proceses for verifying drivers must be safe, and the 
+
+
+
+
+## example - p2p scihub
+right now we can use hidden services to run proxies
+
+can we build napster moments? napster is the archetypical "disrupt" tech
+so is uber, facebook, etc.
+aggregators and marketplaces
+
+well what if we reduced the cost of running scihub to the extent it was never censored
+here's the plan:
+
+scihub frontend becomes a dApp hosted on IPFS
+the papers are hosted on torrents routed through Tor
+the search mapping is a TCR:
+    (paper title, DOI, etc.) => (proxies, IPFS/torrent: urls)
+    (proxy) => (.onion address)
+live proxies gateway-send papers through tor or torrent upload
+the TCR is curated by the holders of the SCIHUB token
+
+
+SCIHUB DAO originally created by multiple parties staking their $XYZ
+the DAO can decide to mint the SCIHUB rep however they choose
+one way is to setup a proxy
+
+the proxies are ranked according to their reputation
+they gain reputaiton by users staking trust bonds with them
+which is forced as part of their challenge-response protocol
+
+on the TCR side of the market, reputation is used to vote upon the list
+
+
+live proxies accept SCIHUB as payment
+SCIHUB is issued using a bonding curve to the SCIHUB DAO
+
+
+
+conceptually speaking, this is simpler than complex
