@@ -99,7 +99,14 @@ def otimes(ox, oy):
 def oplus(ox, oy):
 	# compute SL opinion x oplus opinion y
 	div = ox[2]+oy[2]-ox[2]*oy[2]
-	return [x/div for x in [ox[2]*oy[0]+oy[2]*ox[0], ox[2]*oy[1]+oy[2]*ox[1], ox[2]*oy[2]]]
+	return [
+		x/div 
+		for x in [
+			ox[2]*oy[0]+oy[2]*ox[0], 
+			ox[2]*oy[1]+oy[2]*ox[1], 
+			ox[2]*oy[2]
+		]
+	]
 
 def scalartimes(scalar, ox):
 	# comput scalar mul

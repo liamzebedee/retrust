@@ -50,10 +50,13 @@ def negative_ev(x):
 def total_ev(x):
     return positive_ev(x) + negative_ev(x)
 
-def scalar_mult(a, x):
+def opinion_scalar_mult(a, x):
     (b, d, u) = x
     divisor = a * (b + d) + u
-    return x / divisor
+    x[0] *= a
+    x[1] *= a
+    x /= divisor
+    return x
 
 def opinion_mult(x, y):
     return generic_discount(x, y)
@@ -71,7 +74,7 @@ def consensus(x, y):
     divisor = (x_u + y_u) - (x_u * y_u)
     b = ( x_u * y_b  +  y_u * x_b ) / divisor
     d = ( x_u * y_d  +  y_u * x_d ) / divisor
-    u = x_u * y_u
+    u = x_u * y_u / divisor
     return opinion(b, d, u)
 
 
@@ -79,7 +82,7 @@ def consensus(x, y):
 # -----------
 
 def generic_discount(x, y):
-    return scalar_mult(evidence_transfer_scalar(x), y)
+    return opinion_scalar_mult(evidence_transfer_scalar(x), y)
 
 # theta = max(positive_ev(any X))
 theta = 0
@@ -89,7 +92,7 @@ def configure_ebsl(reputations):
     pass
 
 def specific_discount(x, y):
-    return scalar_mult((positive_ev(x) * theta), y)
+    return opinion_scalar_mult((positive_ev(x) * theta), y)
 
 # g(x) in paper
 def evidence_transfer_scalar(x):

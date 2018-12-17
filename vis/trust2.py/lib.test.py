@@ -2,6 +2,8 @@ import unittest
 
 from lib import *
 
+
+
 class TestEBSL(unittest.TestCase):
     def test_opinion(self):
         x = opinion(.5, 0, 0.5)
@@ -18,16 +20,26 @@ class TestEBSL(unittest.TestCase):
         x = to_opinion(123)
         self.assertTrue(x.sum() == 1)
     
-    def test_ops(self):
+    def test_evidence_ops(self):
         x = to_opinion(123)
         positive_ev(x)
         negative_ev(x)
         total_ev(x)
         
-    def test_addition(self):
+    def test_opinion_add(self):
         x = opinion(0.5, 0.2, 0.3)
         y = opinion(0.5, 0.2, 0.3)
         opinion_add(x, y)
+    
+    def test_opinion_mult(self):
+        x = opinion(0.5, 0.2, 0.3)
+        y = opinion(0.5, 0.2, 0.3)
+        opinion_mult(x, y)
+    
+    def test_opinion_scalar_mult(self):
+        x = opinion(0.5, 0.2, 0.3)
+        op = opinion_scalar_mult(2.4, x)
+        self.assertEqual(op.sum(), 1)
     
 
 class TestInteractionEngine(unittest.TestCase):
