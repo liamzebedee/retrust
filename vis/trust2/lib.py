@@ -27,27 +27,10 @@ def opinion(b, d, u):
     assert(0 <= u < 1)
     return _opinion(b, d, u)
 
-# + 75
-# - 75
-#   2
-# total = 152
-# 75 / 152 = 0.49
-# 75 / 152 = 0.49
-# 2 / 152  = 0.013
-# 
-# alternatively
-# 0 / 
-
-
 def to_opinion(positive, negative, total):
     # Incorporate minimum evidence threshold
     x = _opinion(0, 0, 1)
 
-    # # Set the pos/neg evidence
-    # if evidence_val >= 0:
-    #     x[0] = evidence_val
-    # else:
-    #     x[1] = -1 * evidence_val
     x[0] = float(positive)
     x[1] = float(negative)
     x[2] = C
@@ -67,9 +50,6 @@ def negative_ev(x):
 
 def total_ev(x):
     return positive_ev(x) + negative_ev(x)
-
-# div = scalar*(ox[0]+ox[1])+ox[2]
-# return [x/div for x in [scalar*ox[0], scalar*ox[1], ox[2]]]
 
 def opinion_scalar_mult(a, x):
     (b, d, u) = x
@@ -136,21 +116,11 @@ def evidence_transfer_scalar(x):
 
 
 # R: reputation matrix
-# def f_R(x):
 def f_R(x, A):
-    # # fill diagonal
-    # for i in np.ndindex(x.shape[0]):
-    #     x[i,i] = U
-    
     R = np.copy(x)
-    # R = x
 
     # square
     assert(R.shape[0] == R.shape[1])
-
-    # R_ij = A_ij + sum(iter(k: R_ik * A_kj))
-    # return matrix_plus(f_R, matrix_mult())
-    # users = R.shape[0]
 
     for (i, j) in np.ndindex(R.shape[0], R.shape[1]):
         # op = R[i,j]
@@ -190,31 +160,10 @@ def f_R(x, A):
     return R
 
 
-# R, A
-# def matrixtimes(R, A, plus=operator.add, times=operator.mul):
-# 	return [
-# 		[
-# 			reduce(plus, list(
-# 				map(times, 
-# 					R[i], [A[k][j] for k in range(len(A[0]))])
-# 				)
-# 			) for j in range(len(A))
-#         ] for i in range(len(R))
-# 	]
-
-# def matrixplus(A, B, plus=operator.add):
-# 	return [list(map(plus, A[i],B[i])) for i in range(len(A))]
-
-
-
-# from interactions import InteractionsEngine
-
 def converge_worldview(interactions):
     # 
     # 1. Convert interactions to evidence (aggregation)
     # 
-    # interactions = InteractionsEngine()
-    # interactions.insert(interactions_data)
     users = interactions.get_users()
     evidence = interactions.get_evidence()
     print(evidence)
@@ -236,8 +185,8 @@ def converge_worldview(interactions):
 
     # remap user id's to indices for use in matrix
     user_idxs = list(map(lambda x: x[0], users))
-    # user_idxs
-    
+
+
     for (src, target, positive, negative, total) in evidence:
         i = user_idxs.index(src)
         j = user_idxs.index(target)
@@ -249,14 +198,12 @@ def converge_worldview(interactions):
     # 
     configure_ebsl(reputations)
     direct_opinions = np.copy(reputations)
-    # print("initial:")
-    # print(direct_opinions)
     worldview = optimize.fixed_point(
         f_R, 
         reputations, 
         args=(direct_opinions,), 
         # method="iteration",
-        xtol=1e-2
+        # xtol=1e-2
     )
     print("worldview", worldview)
 
