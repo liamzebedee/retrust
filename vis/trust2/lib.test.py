@@ -3,7 +3,6 @@ import unittest
 from lib import *
 
 
-
 class TestEBSL(unittest.TestCase):
     def test_opinion(self):
         x = opinion(.5, 0, 0.5)
@@ -29,12 +28,20 @@ class TestEBSL(unittest.TestCase):
     def test_opinion_add(self):
         x = opinion(0.5, 0.2, 0.3)
         y = opinion(0.5, 0.2, 0.3)
-        opinion_add(x, y)
+        z = opinion_add(x, y)
+
+        # self.assertEqual(
+        #     z[0], 
+        #     np.asarray([0.5882352941176471, 0.23529411764705882, 0.1764705882352941])
+        # )
     
     def test_opinion_mult(self):
         x = opinion(0.5, 0.2, 0.3)
         y = opinion(0.5, 0.2, 0.3)
-        opinion_mult(x, y)
+        z = opinion_mult(x, y)
+        print(z)
+        # [0.44473537304527666, 0.17789414921811067, 0.3773704777366128]
+        # array([0.44473537, 0.17789415, 0.37737048])
     
     def test_opinion_scalar_mult(self):
         x = opinion(0.5, 0.2, 0.3)
@@ -81,5 +88,6 @@ class TestTrust(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main(
-        TestTrust()
+        # TestTrust()
+        TestEBSL().test_opinion_mult()
     )

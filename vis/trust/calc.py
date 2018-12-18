@@ -13,7 +13,7 @@ import json
 # parser.set_defaults(outputfile = "output.txt", data = "exampleSet.txt", constant=2, mode=0, threshold=1.0)
 
 # Constants
-uncertainty_constant = 2
+uncertainty_constant = 2.0
 threshold=1.0
 
 
@@ -45,15 +45,24 @@ def get_multiplication_mode(mode, data):
 # Returned as (opinions, evidence)
 import numpy as np
 
-def converge_worldview(interactions):
+
+
+def converge_worldview(interactions_eng):
+    # interactions
+    user_idxs = interactions_eng.get_users_list()
+    interactions = [ [user_idxs.index(source), user_idxs.index(target), value] for (source, target, value) in interactions_eng.get_interactions_list() ]
+    print("Interactions og: ", interactions)
+
     # interactions = np.asarray(interactions)
     # Modes
     # Set plus, times operations with respect to EBSL mode
     plus = oplus
-    times = get_multiplication_mode('odot', interactions)
+    times = get_multiplication_mode('boxtimes2', interactions)
 
     # Convert interaction data into opinion matrix
     P = get_opinion(interactions, uncertainty_constant)
+
+    print(np.array(P))
 
     # initfile = open(options.outputfile.split(".")[0]+"-init."+options.outputfile.split(".")[1], "w")
     # # Opinions initially
@@ -69,7 +78,7 @@ def converge_worldview(interactions):
     # Converge
     P2, count, t = matrixgeoconvtest(P, threshold, plus, times)
 
-    # print("Convergence reached at iteration " + str(count))
+    print("Convergence reached at iteration " + str(count))
     # print("write to file: " + options.outputfile)
     # outputfile.write("#Convergence after iteration: "+ str(count)+"\n")
     # outputfile.write("#Actual distance to next iteration: "+ str(t)+"\n")
@@ -84,7 +93,23 @@ def converge_worldview(interactions):
 
     # outputfile.write("#Underlying derived Evidence: \n")
     # print("convert to Evidence matrix")
-    E2 = extract_evidence(P2, uncertainty_constant)
+
+    # E2 = extract_evidence(P2, uncertainty_constant)
+    opinions = P2
+    evidence = []
+
+    shape = (
+        len(user_idxs),
+        len(user_idxs),
+        3
+    )
+    R = np.zeros(shape, dtype='float64')
+    for i in user_idxs:
+        for j in user_idxs:
+            i, j = int(i), int(j)
+            R[i,j] = np.asarray(P2[i][j], dtype='float64')
+    # R = np.asmatrix(P2)
+    return R, evidence
 
     # with open('evidence.json', 'w') as outfile:
     #     json.dump(E2, outfile)
@@ -94,5 +119,7 @@ def converge_worldview(interactions):
     # print("write_to file")
     # write_to_file(E2, outputfile)
 
-    opinions, evidence = P2, E2
-    return (opinions, evidence)
+    # opinions, evidence = P2, E2
+
+
+    # return (opinions, evidence)

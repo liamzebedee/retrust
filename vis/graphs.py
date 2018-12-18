@@ -12,74 +12,50 @@ from pygraphviz import *
 import os
 import json
 
-# from trust.calc import converge_worldview
-from trust2.lib import converge_worldview
 
 import numpy as np
+
+from interactions import InteractionsEngine
 
 def file_without_ext(fname):
     return os.path.splitext(os.path.basename(fname))[0]
 
 
 class graph():
-    def __init__(self, path):
+    def __init__(self, path, worldview_algo):
         self.path = path
         self.name = file_without_ext(path)
+        self.interactions = InteractionsEngine()
 
-        if path.endswith('.npy'):
-            arr = np.load(path)
-            self.G, self.interactions = self.interactions_np_to_graphs(arr)
-        elif path.endswith('.pickle'):
-            self.interactions = pickle.loads(path)
-            self.G = self.interactions_np_to_graphs(arr)
-        else:
-            # reads .interactions
-            with open(path, 'r') as f:
-                interactions = []
-                for line in f.read().split('\n'):
-                    if line == '':
-                        continue
-                
-                    interactions.append([
-                        int(i) for i in line.split(' ')
-                    ])
+        # reads .interactions
+        with open(path, 'r') as f:
+            interactions_list = []
+            for line in f.read().split('\n'):
+                if line == '':
+                    continue
+            
+                interactions_list.append([
+                    int(i) for i in line.split(' ')
+                ])
 
-                self.interactions = interactions
-                print(self.interactions)
+            self.interactions.insert(interactions_list)
+
+            # self.G = self.interactions_list_to_graphs(self.interactions)
                 
-                self.G = self.interactions_list_to_graphs(self.interactions)
-                
-        self.opinions = converge_worldview(self.interactions)
-        # self.evidence = 
+        self.opinions, self.evidence = worldview_algo(self.interactions)
 
         # with open(f'networks/{self.name}.evidence.json', 'w') as f:
         #     json.dump(self.evidence, f) 
         # with open(f'networks/{self.name}.opinions.json', 'w') as f:
         #     json.dump(self.opinions, f)
         
+
         np.set_printoptions(precision=3)
         print(self.opinions)
+
         # self.render_trust(self.evidence, self.interactions, self.G)
         # self.render_dot(self.G, self.G)
         # self.render_heatmap(self.G)
-
-    def interactions_np_to_graphs(self, arr):
-        interactions = np.asarray(arr).tolist()
-        interactions = []
-        for (idx, val) in np.ndenumerate(arr):
-            interactions.append([
-                idx[0],
-                idx[1],
-                val
-            ])
-        
-        print(interactions[0])
-
-        G = nx.MultiDiGraph()
-        for from_, to, _ in interactions:
-            G.add_edge(from_, to)
-        
-        return G, interactions
     
     def interactions_list_to_graphs(self, interactions):
         G = nx.MultiDiGraph()
@@ -87,6 +63,7 @@ class graph():
             G.add_edge(from_, to)
         
         return G, interactions
+    
     
     def render_trust(self, evidence, interactions, G):
         pos = nx.spring_layout(G)

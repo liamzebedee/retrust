@@ -59,13 +59,14 @@ def get_opinion(data, constant):
 	
 	print("flow", Flow)
 	for row in data:
-		val = row[-1]
+		# val = row[-1]
+		(src, target, val) = row
 		if val >= 0:
 			# add positive evidence
-			Flow[row[0]][row[1]][0] += val
+			Flow[src][target][0] += val
 		else:
 			# add negative evidence
-			Flow[row[0]][row[1]][1] += -1*val
+			Flow[src][target][1] += -1*val
 	
 	print("flow", Flow)
 	print("finished")
@@ -206,14 +207,17 @@ def matrixgeoconvtest(A, threshold, plus=operator.add, times=operator.mul):
 	# Default plus = +
 	# Default mul = *
 	# Set diagonal to zero.
+	print("starting:")
+	print(A)
+	
 	t = threshold + 1.0
 	R = A
-	print(A)
+	# print(A)
 	count = 0
 	while (t > threshold and count < 100):
 		count = count + 1
 		Y = R
-		print(R[0][0:2])
+		# print(R[0][0:2])
 		R = matrixplus(A, matrixtimes(R, A, plus, times), plus)
 		for j in range(len(R)):
 			R[j][j] = [0.0, 0.0, 1.0]
