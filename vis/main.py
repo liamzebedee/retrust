@@ -30,4 +30,5 @@ def render(graph_path):
 
 # print(sys.argv)
 if __name__ == '__main__':
-    Run()
+    # Run()
+    graph('networks/1-simple.interactions')

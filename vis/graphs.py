@@ -49,12 +49,16 @@ class graph():
                 
                 self.G = self.interactions_list_to_graphs(self.interactions)
                 
-        self.opinions, self.evidence = converge_worldview(self.interactions)
+        self.opinions = converge_worldview(self.interactions)
+        # self.evidence = 
 
-        with open(f'networks/{self.name}.evidence.json', 'w') as f:
-            json.dump(self.evidence, f) 
-        with open(f'networks/{self.name}.opinions.json', 'w') as f:
-            json.dump(self.opinions, f)
+        # with open(f'networks/{self.name}.evidence.json', 'w') as f:
+        #     json.dump(self.evidence, f) 
+        # with open(f'networks/{self.name}.opinions.json', 'w') as f:
+        #     json.dump(self.opinions, f)
+        
+        np.set_printoptions(precision=3)
+        print(self.opinions)
         # self.render_trust(self.evidence, self.interactions, self.G)
         # self.render_dot(self.G, self.G)
         # self.render_heatmap(self.G)

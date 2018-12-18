@@ -126,7 +126,14 @@ def matrixtimes(A, B, plus=operator.add, times=operator.mul):
 	# compute A.B using own functions for plus and mul
 	# Default plus = +
 	# Default mul = *
-	return [[reduce(plus, list(map(times, A[i], [B[k][j] for k in range(len(B[0]))]))) for j in range(len(B))] for i in range(len(A))]
+	return [
+		[
+			reduce(plus, list(
+				map(times, 
+					A[i], [B[k][j] for k in range(len(B[0]))])
+				)
+			) for j in range(len(B))] for i in range(len(A))
+	]
 	
 def matrixsquare(A, plus=operator.add, times=operator.mul):
 	# compute A^2 using own functions for plus and mul

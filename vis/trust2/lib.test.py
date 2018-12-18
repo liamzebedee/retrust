@@ -46,8 +46,8 @@ class TestInteractionEngine(unittest.TestCase):
     def test_engine_blank(self):
         eng = InteractionsEngine()
 
-        u = eng.get_users()
-        self.assertLess(len(u), 1)
+        with self.assertRaises(Exception):
+            u = eng.get_users()
 
         e = eng.get_evidence()
         self.assertLess(len(e), 1)
@@ -65,7 +65,21 @@ class TestInteractionEngine(unittest.TestCase):
         u = eng.get_users()
 
         self.assertEqual(len(e), 1)
-        self.assertEqual(len(u[0]), 2)
+        self.assertEqual(len(u), 2)
+
+class TestTrust(unittest.TestCase):
+    def test_converge_worldview(self):
+        R = converge_worldview([
+            ('a', 'b', 20),
+            ('a', 'b', -15),
+            ('b', 'a', 5),
+            ('b', 'a', 5),
+            ('b', 'a', 5),
+            ('b', 'a', 5),
+        ])
+        R
 
 if __name__ == '__main__':
-    unittest.main()
+    unittest.main(
+        TestTrust()
+    )

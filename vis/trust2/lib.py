@@ -75,7 +75,7 @@ def consensus(x, y):
     b = ( x_u * y_b  +  y_u * x_b ) / divisor
     d = ( x_u * y_d  +  y_u * x_d ) / divisor
     u = x_u * y_u / divisor
-    return opinion(b, d, u)
+    return _opinion(b, d, u)
 
 
 # Discounting
@@ -104,19 +104,44 @@ def evidence_transfer_scalar(x):
 # Reputation convergence
 # ----------------------
 
-# X is the rep matrix
-def f_R(R):
+
+# R: reputation matrix
+def f_R(x, A):
+    R = x
+
+    # square
+    assert(R.shape[0] == R.shape[1])
+
     # R_ij = A_ij + iter(k: R_ik * A_kj)
     # return matrix_plus(f_R, matrix_mult())
-    pass
+    # users = R.shape[0]
 
+    for (i, j) in np.ndindex(R.shape[0], R.shape[1]):
+        # sum_ = np.array(
+        #     opinion_mult(R[i,k], A[k,j]) for k in np.ndindex(R.shape[1])
+        # )
+        g = A[i,j]
+        
+        for k in range(j):
+            g = opinion_add(
+                g, 
+                opinion_mult(R[i,k], A[k,j])
+            )
+
+        R[i,j] = g
+
+        # R[i,j] = opinion_add(
+        #     A[i,j], 
+        #     np.apply_along_axis(opinion_add, 0, sum_)
+        # )
+    
+    return R
 
 
 
 # Soft threshold on amount of evidence to accept at minimum
 # / uncertainty constant
 C = 2
-
 
 
 
@@ -144,9 +169,16 @@ class InteractionsEngine:
 
     def get_users(self):
         users = self.conn.execute('''
-            SELECT DISTINCT source, target
+        select distinct id from (
+            SELECT DISTINCT source AS id
             FROM interactions
-            ORDER BY source, target DESC
+
+            UNION
+
+            SELECT DISTINCT target AS id
+            FROM interactions
+        )
+        ORDER BY id
         ''')
         return users.fetchall()
     
@@ -168,30 +200,43 @@ def converge_worldview(interactions_data):
     evidence = interactions.get_evidence()
 
 
+
     # 
     # 2. Convert evidence to opinions and build reputations matrix.
     # 
     shape = (
-        users.rowcount,
-        users.rowcount,
+        len(users),
+        len(users),
         3
     )
-    reputations = np.zeros(shape, dtype=int)
+    reputations = np.zeros(shape, dtype=float)
+
+    # fill diagonal
+    for i in np.ndindex(shape[0]):
+        reputations[i,i] = U
 
     # remap user id's to indices for use in matrix
-    user_idxs = set(list(users))
+    user_idxs = list(map(lambda x: x[0], users))
+    # user_idxs
     
     for (src, target, val) in evidence:
         i = user_idxs.index(src)
         j = user_idxs.index(target)
 
-        reputations[src, target] = to_opinion(val)
-    
+        reputations[i, j] = to_opinion(val)
 
     # 
     # 3. Converge opinions matrix.
     # 
     configure_ebsl(reputations)
-    worldview = optimize.fixed_point(f_R, reputations, xtol=1e-4)
+    direct_opinions = np.copy(reputations)
+    worldview = optimize.fixed_point(
+        f_R, 
+        reputations, 
+        args=(direct_opinions,), 
+        xtol=1e-4
+    )
+
+    # evidence = 
 
     return worldview
