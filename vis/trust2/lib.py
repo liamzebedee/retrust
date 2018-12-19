@@ -16,9 +16,9 @@ def _opinion(b, d, u):
     return np.array((b, d, u), dtype='float64')
 
 # Dogmatic opinions
-B = _opinion(1, 0, 0)
-D = _opinion(0, 1, 0)
-U = _opinion(0, 0, 1)
+B = _opinion(1., 0, 0)
+D = _opinion(0, 1., 0)
+U = _opinion(0, 0, 1.)
 
 def opinion(b, d, u):
     # exclude dogmatics
@@ -29,16 +29,21 @@ def opinion(b, d, u):
 
 def to_opinion(positive, negative, total):
     # Incorporate minimum evidence threshold
-    x = _opinion(0, 0, 1)
+    
+    # x = _opinion(0, 0, 1.)
+    x = np.array(
+        (positive, negative, C), 
+        dtype='float64'
+    )
 
-    x[0] = float(positive)
-    x[1] = float(negative)
-    x[2] = C
+    # x[0] = float(positive)
+    # x[1] = float(negative)
+    # x[2] = C
 
     # Normalise
     x /= x.sum()
     
-    return x
+    return opinion(*x)
 
 def positive_ev(x):
     (b, _, u) = x
@@ -166,7 +171,7 @@ def converge_worldview(interactions):
     # 
     users = interactions.get_users()
     evidence = interactions.get_evidence()
-    print(evidence)
+    # print(evidence)
 
 
     # 
@@ -177,11 +182,15 @@ def converge_worldview(interactions):
         len(users),
         3
     )
-    reputations = np.zeros(shape, dtype=np.float64)
+    reputations = np.full(
+        shape, 
+        U,
+        dtype=np.float64
+    )
 
-    # fill diagonal
-    for i in np.ndindex(shape[0]):
-        reputations[i,i] = U
+    # # fill diagonal
+    # for i in np.ndindex(shape[0]):
+    #     reputations[i,i] = U
 
     # remap user id's to indices for use in matrix
     user_idxs = list(map(lambda x: x[0], users))
@@ -203,7 +212,7 @@ def converge_worldview(interactions):
         reputations, 
         args=(direct_opinions,), 
         # method="iteration",
-        # xtol=1e-2
+        xtol=1e-5
     )
     print("worldview", worldview)
 
