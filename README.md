@@ -20,6 +20,7 @@ In chronological order:
  - Subjective logic has problems with the communicativity of its operators. EBSL looks good ([Flow-based reputation with uncertainty](https://arxiv.org/pdf/1402.3319.pdf))
  - Relative vs. Absolute trust measures. 
  - https://www.youtube.com/watch?v=ZbgDFXxmNuk
+ - [Tribler's research on consensus trust](https://github.com/Tribler/tribler/issues/3357), [some simulations on 'personalised' PageRank](https://github.com/Tribler/tribler/issues/2805) ([code](https://github.com/alexander-stannat/Incremental-Pagerank))
 
 ### Applications
  - Proof of personhood https://github.com/protocol/research/issues/11
