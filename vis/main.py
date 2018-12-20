@@ -53,15 +53,16 @@ def simulate1(graph_path):
     # create a network of behaving nodes
     # create some bad nodes trying to infiltrate
     # estimate the cost of obtaining the trust of all good nodes
-    good_nodes = [str(i) for i in range(10)]
+    good_nodes = [str(i+1) for i in range(10)]
     hub_node = '100'
-    bad_nodes = ['10']
+    bad_nodes = ['0']
     
     # create interactions between good nodes
     # initial vouches of trust
     for nid in good_nodes:
         source = nid
-        value = 50
+        value = 2
+        hub_value = len(good_nodes)
         interactions.insert([
             (nid,      hub_node, value),
             (hub_node, nid,      value)
@@ -69,10 +70,11 @@ def simulate1(graph_path):
 
         for target in good_nodes:
             if target != nid:
-                pass
-                # interactions.insert([
-                #     (source, target, value) 
-                # ])
+                # pass
+                interactions.insert([
+                    (source, target, hub_value),
+                    (target, source, hub_value) 
+                ])
                 
     
     # for nid in bad_nodes:
@@ -85,11 +87,12 @@ def simulate1(graph_path):
     #             ])
     
     interactions.insert([
-        ('0', '10', 1),
-        ('1', '10', 1),
-        ('2', '10', 1),
-        ('3', '10', 1),
-        ('4', '10', 1),
+        ('1', '0', 1),
+        ('2', '0', 1),
+        ('3', '0', 1),
+        ('4', '0', 1),
+        # ('3', '10', 1),
+        # ('4', '10', 1),
         # ('1', '10', 200),
         # ('2', '10', 1),
     ])
@@ -97,8 +100,8 @@ def simulate1(graph_path):
     rep = ReputationEngine(interactions)
     rep.converge()
     for nid in good_nodes:
-        print(rep.rep(nid, '10'))
-        print(rep.rep('10', nid))
+        print(rep.rep(nid, '0'))
+        print(rep.rep('0', nid))
     # print(rep.rep('0', '10') - rep.rep('10', '0'))
     # print()
 
