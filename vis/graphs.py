@@ -43,11 +43,6 @@ class graph():
             # self.G = self.interactions_list_to_graphs(self.interactions)
                 
         self.opinions, self.evidence = worldview_algo(self.interactions)
-
-        # with open(f'networks/{self.name}.evidence.json', 'w') as f:
-        #     json.dump(self.evidence, f) 
-        # with open(f'networks/{self.name}.opinions.json', 'w') as f:
-        #     json.dump(self.opinions, f)
         
 
         np.set_printoptions(precision=3)
@@ -56,14 +51,13 @@ class graph():
         # self.render_trust(self.evidence, self.interactions, self.G)
         # self.render_dot(self.G, self.G)
         # self.render_heatmap(self.G)
-    
-    def interactions_list_to_graphs(self, interactions):
+
         G = nx.MultiDiGraph()
         for from_, to, _ in interactions:
             G.add_edge(from_, to)
         
-        return G, interactions
-    
+        
+        self.G = G
     
     def render_trust(self, evidence, interactions, G):
         pos = nx.spring_layout(G)
