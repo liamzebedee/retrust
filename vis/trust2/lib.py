@@ -45,6 +45,14 @@ def to_opinion(positive, negative, total):
     
     return opinion(*x)
 
+def to_evidence(x):
+    pos = C * (x[0] / x[2])
+    neg = C * (x[1] / x[2])
+    ev = np.array((pos, neg))
+    return ev
+	# return [[[constant*(M[i][j][0]/M[i][j][2]), constant*(M[i][j][1]/M[i][j][2])] for j in range(len(M[i]))] for i in range(len(M))]
+    
+
 def positive_ev(x):
     (b, _, u) = x
     return C * (b / u)
@@ -56,42 +64,19 @@ def negative_ev(x):
 def total_ev(x):
     return positive_ev(x) + negative_ev(x)
 
-def opinion_scalar_mult(a, x):
-    (b, d, u) = x
-    # np.copy(x)
-    
-    # new_x = opinion(b, d, u)
-    
-    divisor = a * (b + d) + u
-    # new_x[0] *= a
-    # new_x[1] *= a
-    # new_x /= divisor
-    return opinion(b*a / divisor, d*a / divisor, u / divisor)
-
-def opinion_mult(x, y):
-    return generic_discount(x, y)
-
-def opinion_add(x, y):
-    return consensus(x, y)
-
-# Consensus
-# ---------
-
-def consensus(x, y):
-    (x_b, x_d, x_u) = x
-    (y_b, y_d, y_u) = y
-
-    divisor = (x_u + y_u) - (x_u * y_u)
-    b = ( x_u * y_b  +  y_u * x_b ) / divisor
-    d = ( x_u * y_d  +  y_u * x_d ) / divisor
-    u = x_u * y_u / divisor
-    return opinion(b, d, u)
-
-
 
 # Discounting
 # -----------
 
+def opinion_scalar_mult(a, x):
+    # Scalar mult basically multiplies against (b,d)
+    # And then normalises.
+    (b, d, u) = x
+    divisor = a * (b + d) + u
+    return opinion(b*a / divisor, d*a / divisor, u / divisor)
+
+def opinion_mult(x, y):
+    return generic_discount(x, y)
 
 def generic_discount(x, y):
     return opinion_scalar_mult(
@@ -103,7 +88,6 @@ def generic_discount(x, y):
 theta = 0
 def configure_ebsl(reputations):
     # theta = reputations[:, :, 0]
-    # pos = 
     pass
 
 def specific_discount(x, y):
@@ -116,12 +100,34 @@ def evidence_transfer_scalar(x):
     # return b
 
 
+# Consensus
+# ---------
+
+def opinion_add(x, y):
+    (x_b, x_d, x_u) = x
+    (y_b, y_d, y_u) = y
+
+    divisor = (x_u + y_u) - (x_u * y_u)
+    b = ( x_u * y_b  +  y_u * x_b ) / divisor
+    d = ( x_u * y_d  +  y_u * x_d ) / divisor
+    u = x_u * y_u / divisor
+    return opinion(b, d, u)
+    
+
+
+
 # Reputation convergence
 # ----------------------
 
 
+import numpy as np
+import matplotlib.pyplot as plt
+
 # R: reputation matrix
+f_R_i = 0
 def f_R(x, A):
+    global f_R_i
+    f_R_i += 1
     R = np.copy(x)
 
     # square
@@ -153,15 +159,23 @@ def f_R(x, A):
                 opinion_mult(R[i,k], A[k,j])
             )
 
+        # R[i,j] = opinion_add(g, opinion(0.1, 0, 0.9))
+        # R[i,j] = opinion_scalar_mult(.7, g)
         R[i,j] = g
-    
-
 
     
     # fill diagonal
     for i in np.ndindex(R.shape[0]):
         R[i,i] = U
     
+    fig, ax = plt.subplots()
+    ax.matshow(x[:,:,0], cmap=plt.cm.Blues)
+    for (i, j) in np.ndindex(R.shape[0], R.shape[1]):
+        t = np.array2string(x[i, j, 0], precision=3, separator=',', suppress_small=True).split('.')[1]
+        text = ax.text(j, i, t,
+                    ha="center", va="center", color="w")
+    plt.savefig(f'networks/{f_R_i}.repmatrix.png')
+
     return R
 
 
@@ -172,7 +186,7 @@ def converge_worldview(interactions):
     users = interactions.get_users()
     evidence = interactions.get_evidence()
     # print(evidence)
-
+    f_R_i = 0
 
     # 
     # 2. Convert evidence to opinions and build reputations matrix.
@@ -212,10 +226,36 @@ def converge_worldview(interactions):
         reputations, 
         args=(direct_opinions,), 
         method="iteration",
-        xtol=1e-5
+        # xtol=1e-5
     )
     print("worldview", worldview)
 
-    evidence = []
+    evidence = np.full(
+        (
+            len(users),
+            len(users),
+            2
+        ),
+        np.array((0, 0)),
+        dtype=np.int32
+    )
+
+    for (i, j) in np.ndindex(worldview.shape[0], worldview.shape[1]):
+        evidence[i,j] = to_evidence(worldview[i,j])
+
+    fig, ax = plt.subplots()
+    ax.matshow(evidence[:,:,0], cmap=plt.cm.Blues)
+    plt.savefig(f'networks/evidence.pos.png')
+
+    fig, ax = plt.subplots()
+    ax.matshow(evidence[:,:,1], cmap=plt.cm.Blues)
+    plt.savefig(f'networks/evidence.neg.png')
+
+    # for (src, target, positive, negative, total) in evidence:
+    #     i = user_idxs.index(src)
+    #     j = user_idxs.index(target)
+
+    #     reputations[i, j] = to_opinion(positive, negative, total)
+
 
     return worldview, evidence
