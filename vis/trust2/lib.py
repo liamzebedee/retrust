@@ -24,7 +24,7 @@ def opinion(b, d, u):
     # exclude dogmatics
     assert(0 <= b < 1)
     assert(0 <= d < 1)
-    assert(0 <= u < 1)
+    assert(0 <= u < 1 or (b,d,u) == (0,0,1))
     return _opinion(b, d, u)
 
 def to_opinion(positive, negative, total):
@@ -66,7 +66,7 @@ def opinion_scalar_mult(a, x):
     # new_x[0] *= a
     # new_x[1] *= a
     # new_x /= divisor
-    return _opinion(b*a / divisor, d*a / divisor, u / divisor)
+    return opinion(b*a / divisor, d*a / divisor, u / divisor)
 
 def opinion_mult(x, y):
     return generic_discount(x, y)
@@ -85,7 +85,7 @@ def consensus(x, y):
     b = ( x_u * y_b  +  y_u * x_b ) / divisor
     d = ( x_u * y_d  +  y_u * x_d ) / divisor
     u = x_u * y_u / divisor
-    return _opinion(b, d, u)
+    return opinion(b, d, u)
 
 
 
@@ -211,7 +211,7 @@ def converge_worldview(interactions):
         f_R, 
         reputations, 
         args=(direct_opinions,), 
-        # method="iteration",
+        method="iteration",
         xtol=1e-5
     )
     print("worldview", worldview)

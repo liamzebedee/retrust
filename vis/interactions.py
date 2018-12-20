@@ -17,6 +17,8 @@ class InteractionsEngine:
     
     def insert(self, interactions):
         for (source, target, value) in interactions:
+            if source == target:
+                print("Skipping self-evaluation interaction...")
             self.conn.execute('''INSERT INTO interactions VALUES (?, ?, ?)''', (source, target, value))
         self.conn.commit()
 
