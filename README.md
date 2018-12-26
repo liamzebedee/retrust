@@ -1,5 +1,11 @@
 
-For Alec - WIP.
+Retrust is a WIP protocol for decentralised reputation/trust, based on [Evidence-Based Subjective Logic](https://arxiv.org/abs/1402.3319) (EBSL):
+ * **Interaction-based**: reputation is based on generic interactions of the form, (source, target, value). There is no need to specify trusted friends/seeds, nor keep this information updated, as it is automatically derived from interactions.
+ * **Application-agnostic**: reputation is a [subjective-logic opinion](https://en.wikipedia.org/wiki/Subjective_logic) of `(belief, disbelief, uncertainty)` - which can model any quality of reliability in interaction.
+
+Properties still being investigated:
+ * **Sybil-resistance**: a flow-based trust algorithm is computed from the perspective of each node.
+ * **Quorum-based resolution**: interactions are converted to evidence in the form of `(positive, negative)` - it is likely possible we can use this to rank the effective trust of a node in a network, and thus use this to implement true holocratic voting.
 
 ## Developments
 In chronological order:
@@ -12,6 +18,7 @@ In chronological order:
  - [EBSL source (Nov)](https://gist.github.com/liamzebedee/1f5c56d656ceba808a2e99e78e9f6160)
  - [Protocol brainstorms (Dec)](https://hackmd.io/m8MARMuuRHKZFw9xyQIH9Q), [Reputation as economic mechanism (Dec)](https://hackmd.io/3UVGjqBhSDKsr85nYiiIsw)
  - [Evidence-Based Subjective Logic (EBSL) reimplemented in Python with Numpy (Dec)](https://github.com/liamzebedee/retrust/tree/3933ecf076a775d566d7a07349bd6d46f3c0e002/vis/trust2)
+ - [Discussions with Abram Simons of BrightID (Dec)](https://www.reddit.com/r/idealmoney/comments/a9croi/deriving_a_reliable_trust_protocol_that_scales_to/)
 
 ## Resources
  - “decentralized sybil resistant identity” at Devcon4. Read the [reputation jam tweetstorm](https://twitter.com/sinahab/status/1027640621110984704)
@@ -30,3 +37,4 @@ In chronological order:
  - scalable personal currency https://www.joincircles.net/
  - citizen's economic leverage
  - generic reputation without middlemen - Swarm City, Colony, Augur
+ - P2P Scihub
