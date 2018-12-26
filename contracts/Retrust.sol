@@ -1,3 +1,7 @@
+// interface IStakeAgreement {
+//     function participants() external returns (address[]);
+// }
+
 contract Retrust {
     event StakeEvent(
         address source,
@@ -15,6 +19,12 @@ contract Retrust {
 
     constructor() public {
     }
+
+    // Meta-tx's.
+
+
+    // function postStakeAgreement(address agreement) external {
+    // }
 
     function stakeTrust(address _target, uint256 _value) external {
         require(_value != 0, "stake value should be nonzero");

@@ -170,6 +170,19 @@ def f_R(x, A):
     
     fig, ax = plt.subplots()
     ax.matshow(x[:,:,0], cmap=plt.cm.Blues)
+    
+    # # We want to show all ticks...
+    # ax.set_xticks(np.arange(len(farmers)))
+    # ax.set_yticks(np.arange(len(vegetables)))
+    # # ... and label them with the respective list entries
+    # ax.set_xticklabels(farmers)
+    # ax.set_yticklabels(vegetables)
+
+    # # Rotate the tick labels and set their alignment.
+    # plt.setp(ax.get_xticklabels(), rotation=45, ha="right",
+    #         rotation_mode="anchor")
+    
+    
     for (i, j) in np.ndindex(R.shape[0], R.shape[1]):
         t = np.array2string(x[i, j, 0], precision=3, separator=',', suppress_small=True).split('.')[1]
         text = ax.text(j, i, t,

@@ -8,14 +8,14 @@ class ReputationEngine():
         self.interactions = interactions
     
     def converge(self):
-        self.worldview, self.evidence = converge_worldview(self.interactions)
+        self.R, self.E = converge_worldview(self.interactions)
 
     def user(self, user_id):
         users = self.interactions.get_users_list()
         return users.index(user_id)
     
     def perspective(self, user_id):
-        return self.worldview[self.user(user_id)]
+        return self.R[self.user(user_id)]
     
     def rep(self, perspective, user_id):
-        return self.worldview[self.user(perspective), self.user(user_id)]
+        return self.R[self.user(perspective), self.user(user_id)]
