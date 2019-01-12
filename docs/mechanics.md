@@ -5,7 +5,7 @@ compared to systems such as:
 - Circle
 - BrightID
 
-the reputation computation scales without manual ceration of groups and memberships
+the reputation computation scales without manual curation of groups and memberships
 
 the cost of attacking the group / subverting the reputation metric scales (SOMETHING)ALLY as there are more connections between nodes
 

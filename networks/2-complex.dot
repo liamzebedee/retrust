@@ -1,5 +1,0 @@
-digraph {
-    a -> { b, c, d } -> e;
-    e -> { b, c, d };
-    e -> { b, c, d };
-}
