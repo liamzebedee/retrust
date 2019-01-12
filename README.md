@@ -38,3 +38,6 @@ In chronological order:
  - citizen's economic leverage
  - generic reputation without middlemen - Swarm City, Colony, Augur
  - P2P Scihub
+ - reputation as an alternative to economic stake in eg. curation markets
+ - education/accreditation platform (Mick)
+ 
