@@ -1,21 +1,11 @@
-
-import numpy as np
-from interactions import InteractionsEngine
-from trust2.lib import converge_worldview
-
 class ReputationEngine():
     def __init__(self, interactions):
-        self.interactions = interactions
+        pass
     
-    def converge(self):
-        self.R, self.E = converge_worldview(self.interactions)
-
-    def user(self, user_id):
-        users = self.interactions.get_users_list()
-        return users.index(user_id)
+    # Get the reputation opinions of every user in the system from a's perspective
+    def perspective(self, a):
+        raise NotImplementedError
     
-    def perspective(self, user_id):
-        return self.R[self.user(user_id)]
-    
-    def rep(self, perspective, user_id):
-        return self.R[self.user(perspective), self.user(user_id)]
+    # Gets b's reputation from a's perspective
+    def reputation_of(self, a, b):
+        raise NotImplementedError

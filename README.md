@@ -7,6 +7,13 @@ Properties still being investigated:
  * **Sybil-resistance**: a flow-based trust algorithm is computed from the perspective of each node.
  * **Quorum-based resolution**: interactions are converted to evidence in the form of `(positive, negative)` - it is likely possible we can use this to rank the effective trust of a node in a network, and thus use this to implement true holocratic voting.
 
+## Organisation
+ - `ebsl/` - evidence-based subjective logic implementations (original and my refactored version with Numpy)
+ - `retrust/` - core mechanics of the protocol (interactions, quorum and reputation engines)
+ - `simulation/` - code for simulating behaviour of the different engines
+ - `contracts/` - Solidity smart contracts
+ - `visualisation/` - matplotlib-based visualisation code, used within simulation/ and datasets/
+
 ## Developments
 In chronological order:
 

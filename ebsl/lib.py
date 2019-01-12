@@ -3,7 +3,6 @@ from scipy import optimize
 from functools import reduce
 
 
-
 # Evidence and opinions
 # ---------------------
 
@@ -186,107 +185,10 @@ def f_R(x, A):
     #         rotation_mode="anchor")
     # print("ITERATION")
     
-    for (i, j) in np.ndindex(R.shape[0], R.shape[1]):
-        t = np.array2string(x[i, j, 0], precision=3, separator=',', suppress_small=True).split('.')[1]
-        text = ax.text(j, i, t,
-                    ha="center", va="center", color="w")
-    plt.savefig(f'networks/{f_R_i}.repmatrix.png')
+    # for (i, j) in np.ndindex(R.shape[0], R.shape[1]):
+    #     t = np.array2string(x[i, j, 0], precision=3, separator=',', suppress_small=True).split('.')[1]
+    #     text = ax.text(j, i, t,
+    #                 ha="center", va="center", color="w")
+    # plt.savefig(f'networks/{f_R_i}.repmatrix.png')
 
     return R
-
-
-
-def converge_worldview(interactions):
-    
-    # 
-    # 1. Convert interactions to evidence (aggregation)
-    # 
-    users = interactions.get_users()
-    evidence = interactions.get_evidence()
-    # print(evidence)
-    f_R_i = 0
-
-    # 
-    # 2. Convert evidence to opinions and build reputations matrix.
-    # 
-    shape = (
-        len(users),
-        len(users),
-        3
-    )
-    reputations = np.full(
-        shape, 
-        U,
-        dtype=np.float64
-    )
-
-    # # fill diagonal
-    # for i in np.ndindex(shape[0]):
-    #     reputations[i,i] = U
-
-    # remap user id's to indices for use in matrix
-    user_idxs = list(map(lambda x: x[0], users))
-
-    initial_evidence = np.full(
-        (
-            len(users),
-            len(users),
-            2
-        ),
-        np.array((0, 0)),
-        dtype=np.int32
-    )
-
-    for (src, target, positive, negative, total) in evidence:
-        i = user_idxs.index(src)
-        j = user_idxs.index(target)
-        initial_evidence[i, j] = np.array((positive, negative))
-        reputations[i, j] = to_opinion(positive, negative, total)
-
-    # 
-    # 3. Converge opinions matrix.
-    # 
-    # print("START {} {}".format(len(users), len(users)))
-    configure_ebsl(reputations)
-    direct_opinions = np.copy(reputations)
-    worldview = optimize.fixed_point(
-        f_R, 
-        reputations, 
-        args=(direct_opinions,), 
-        method="iteration",
-        # xtol=1e-5
-    )
-    # print("END")
-    print("worldview", worldview)
-
-    evidence = np.full(
-        (
-            len(users),
-            len(users),
-            2
-        ),
-        np.array((0, 0)),
-        dtype=np.int32
-    )
-
-    for (i, j) in np.ndindex(worldview.shape[0], worldview.shape[1]):
-        evidence[i,j] = to_evidence(worldview[i,j])
-
-    print(evidence - initial_evidence)
-
-    fig, ax = plt.subplots()
-    ax.matshow(evidence[:,:,0], cmap=plt.cm.Blues)
-    # plt.savefig(f'networks/evidence.pos.png')
-
-    fig, ax = plt.subplots()
-    ax.matshow(evidence[:,:,1], cmap=plt.cm.Blues)
-    # plt.savefig(f'networks/evidence.neg.png')
-
-    # for (src, target, positive, negative, total) in evidence:
-    #     i = user_idxs.index(src)
-    #     j = user_idxs.index(target)
-
-    #     reputations[i, j] = to_opinion(positive, negative, total)
-
-
-    return worldview, evidence

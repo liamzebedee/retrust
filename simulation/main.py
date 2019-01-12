@@ -1,60 +1,19 @@
-import json
 from os.path import abspath
-
-# def load():
-#     interactions = None
-#     opinions = None
-#     evidence = None
-
-#     with open(abspath('./interactions.json'), 'r') as f:
-#         interactions = json.load(f)
-#     with open(abspath('./opinions.json'), 'r') as f:
-#         opinions = json.load(f)
-#     with open(abspath('./evidence.json'), 'r') as f:
-#         evidence = json.load(f)
-
-# from pathlib import Path
-from graphs import graph
-
+import json
 import sys
-from commandr import command, Run
-
-
-from trust.calc import converge_worldview as converge_worldview_og
-from trust2.lib import converge_worldview
-from trust2.quorum import calc_quorum
-
-import numpy as np
-from interactions import InteractionsEngine
-from reputation import ReputationEngine
-
 import itertools
-np.set_printoptions(precision=4)
-np.set_printoptions(suppress=True)
 
 
-@command('render')
-def compare_algos(graph_path):
-    g1 = graph(graph_path, converge_worldview_og)
-    print("\n")
-    g2 = graph(graph_path, converge_worldview)
+from shared import numpy_helpers
+from shared import matplotlib_helpers
 
-    diff = g2.opinions - g1.opinions
+from retrust.quorum import calc_quorum
+from retrust.interactions import InteractionsEngine
+from ebsl.reputation import EBSLReputationEngine
 
-    print("G1")
-    print(g1.opinions)
-    print("G2")
-    print(g2.opinions)
+from helpers import id_generator
 
-def id_generator():
-    id = 0
-    while(True):
-        yield str(id)
-        id += 1
-
-@command('simulate1')
 def simulate1(graph_path):
-    np.seterr(all='raise')
     interactions = InteractionsEngine()
 
     node_ids = id_generator()
@@ -122,8 +81,7 @@ def simulate1(graph_path):
         # ('2', '10', 1),
     ])
 
-    rep = ReputationEngine(interactions)
-    rep.converge()
+    rep = EBSLReputationEngine(interactions)
     # for nid in good_nodes:
     #     print(rep.rep(nid, '10'))
     #     print(rep.rep('10', nid))
@@ -131,12 +89,8 @@ def simulate1(graph_path):
     # print(rep.rep('0', '10') - rep.rep('10', '0'))
     # print()
     calc_quorum(rep.R, rep.E)
-    # print(E)
 
-# load_all_graphs()
-
-# print(sys.argv)
 if __name__ == '__main__':
     # Run()
-    # render('networks/1-simple.interactions')
+    # print(sys.argv)
     simulate1('networks/1-simple.interactions')
