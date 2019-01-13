@@ -9,12 +9,12 @@ from shared import matplotlib_helpers
 
 from retrust.quorum import calc_quorum
 from retrust.interactions import InteractionsEngine
-from ebsl.reputation import EBSLReputationEngine, VisualisedEBSLReputationEngine
+from ebsl.reputation import EBSLReputationEngine
 
 from simulation.helpers import NodeIdGenerator
 
 
-def simulate1(graph_path):
+def simulate1():
     interactions = InteractionsEngine()
 
     node_ids = NodeIdGenerator()
@@ -82,7 +82,7 @@ def simulate1(graph_path):
         # ('2', '10', 1),
     ])
 
-    rep = VisualisedEBSLReputationEngine(interactions)
+    rep = EBSLReputationEngine(interactions)
     # rep = EBSLReputationEngine(interactions)
 
 
@@ -92,7 +92,7 @@ def simulate1(graph_path):
 
     # print(rep.rep('0', '10') - rep.rep('10', '0'))
     # print()
-    # calc_quorum(rep.R, rep.E)
+    calc_quorum(rep.R, rep.E)
 
 if __name__ == '__main__':
     # Run()
