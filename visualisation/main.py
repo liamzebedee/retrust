@@ -9,7 +9,7 @@ from shared import matplotlib_helpers
 
 from retrust.quorum import calc_quorum
 from retrust.interactions import InteractionsEngine
-from ebsl.reputation import EBSLReputationEngine, VisualisedEBSLReputationEngine
+from visualisation.reputation import VisualisedEBSLReputationEngine
 
 from simulation.helpers import NodeIdGenerator
 
@@ -18,7 +18,7 @@ def main():
     interactions = InteractionsEngine()
     node_ids = NodeIdGenerator()
 
-    good_nodes = node_ids(8)
+    good_nodes = node_ids(2)
     hub_node = node_ids(1)
     
     for nid in good_nodes:
@@ -39,6 +39,7 @@ def main():
                 ])
 
     rep = VisualisedEBSLReputationEngine(interactions)
+
 
 if __name__ == '__main__':
     main()

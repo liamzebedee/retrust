@@ -14,4 +14,4 @@ class NodeIdGenerator():
 		if amt == 1:
 			return next(self.gen)
 		else:
-			return list(itertools.islice(self.gen, 10))
+			return list(itertools.islice(self.gen, amt))

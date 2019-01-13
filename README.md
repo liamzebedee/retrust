@@ -26,6 +26,7 @@ In chronological order:
  - [Protocol brainstorms (Dec)](https://hackmd.io/m8MARMuuRHKZFw9xyQIH9Q), [Reputation as economic mechanism (Dec)](https://hackmd.io/3UVGjqBhSDKsr85nYiiIsw)
  - [Evidence-Based Subjective Logic (EBSL) reimplemented in Python with Numpy (Dec)](https://github.com/liamzebedee/retrust/tree/3933ecf076a775d566d7a07349bd6d46f3c0e002/vis/trust2)
  - [Discussions with Abram Simons of BrightID (Dec)](https://www.reddit.com/r/idealmoney/comments/a9croi/deriving_a_reliable_trust_protocol_that_scales_to/)
+ - Matplotlib animation of EBSL algorithm (`python -m visualisation.main`)
 
 ## Resources
  - “decentralized sybil resistant identity” at Devcon4. Read the [reputation jam tweetstorm](https://twitter.com/sinahab/status/1027640621110984704)
