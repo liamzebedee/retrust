@@ -20,30 +20,50 @@ np.set_printoptions(suppress=True)
 
 def calc_quorum(R, E):
     # print(E.shape)
-    # np.savetxt("E.csv", E[:,:,0], delimiter=",", fmt="%1.4f")
-    # np.savetxt("R.csv", R[:,:,0], delimiter=",")
+    np.savetxt("old/E.csv", E[:,:,0], delimiter=",", fmt="%1.4f")
+    np.savetxt("old/R.csv", R[:,:,0], delimiter=",")
 
-    # total_ev = np.full(
-    #     (E.shape[0], E.shape[1]),
-    #     0.,
-    #     dtype=np.int32
-    # )
+    total_ev = np.full(
+        (E.shape[0], E.shape[1]),
+        0.,
+        dtype=np.int32
+    )
 
-    # for (i, j) in np.ndindex(E.shape[0], E.shape[1]):
-    #     total_ev[i,j] = E[i,j].sum()
-    #     if i == j
-    #         total_ev[i,j] = 0.
+    print(E)
 
+    for (i, j) in np.ndindex(E.shape[0], E.shape[1]):
+        total_ev[i,j] = E[i,j].sum()
 
+        b,d,u = R[i,j]
+
+        total_ev[i,j] *= np.sqrt(b)
+        
+        if i == j:
+            total_ev[i,j] = 0.
+
+    normalised_ev = np.full(
+        (E.shape[0], E.shape[1]),
+        0.,
+        dtype=np.float32
+    )
+
+    for (i, j) in np.ndindex(E.shape[0], E.shape[1]):
+        normalised_ev[i,j] = total_ev[i,j] / total_ev[i,:].sum()
+
+    print(normalised_ev)
+    print(total_ev)
+    # raise
 
     # print(total_ev)
-    # eigenvalues, eigenvectors = LA.eig(total_ev)
-
+    eigenvalues, eigenvectors = LA.eig(normalised_ev)
+    print(eigenvalues)
+    print(eigenvectors)
+    print("principal", eigenvectors[0])
     # ind = eigenvalues.argsort()
-    # # eigenvector of largest eigenvalue at ind[-1], normalized
+    # eigenvector of largest eigenvalue at ind[-1], normalized
     # largest = np.array(eigenvectors[:, ind[-1]]).flatten().real
     # norm = float(largest.sum())
-    # # pageranks = dict(zip(G, map(float, largest / norm)))
+    # pageranks = dict(zip(G, map(float, largest / norm)))
     # print(largest, norm)
     # print(pageranks)
 
@@ -52,13 +72,15 @@ def calc_quorum(R, E):
     # np.savetxt("eigenvectors.csv", v, delimiter=",")
 
     # return (w,v)
-    return optimize.fixed_point(
+    quorums = optimize.fixed_point(
         f_E, 
-        E, 
-        args=(E,), 
+        total_ev, 
+        args=(np.copy(total_ev),), 
         # method="iteration",
         # xtol=1e-5
     )
+
+    print(quorums)
 
 
 
@@ -70,10 +92,16 @@ def f_E(x, A):
     #     E[i,i] = 1
     
 
-    # for (i, j) in np.ndindex(x.shape[0], x.shape[1]):
+    for (i, j) in np.ndindex(x.shape[0], x.shape[1]):
         # g = np.copy(A[i,j])
+        g = E[i,j].copy()
+
+        for k in range(x.shape[0]):
+            g += E[i,k] * A[k,j]
+
         
-        # for k in range(x.shape[0]):
+        E[i,j] = g / E[i,:].sum()
+        
         #     g = opinion_add(
         #         g, 
         #         opinion_mult(R[i,k], A[k,j])

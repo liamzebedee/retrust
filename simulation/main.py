@@ -22,9 +22,24 @@ def simulate1():
     # create a network of behaving nodes
     # create some bad nodes trying to infiltrate
     # estimate the cost of obtaining the trust of all good nodes
-    good_nodes = node_ids(10)
+    good_nodes = node_ids(3)
+    other_friends = node_ids(3)
     hub_node = node_ids(1)
-    bad_nodes = node_ids(10)
+    # bad_nodes = node_ids(10)
+
+    for nid in other_friends:
+        value = 2
+        for target in good_nodes:
+            interactions.insert([
+                (nid,      target, value),
+                (target, nid,      value)
+            ])
+        
+    interactions.insert([
+        (other_friends[0], good_nodes[0], 2),
+        (other_friends[0], good_nodes[1], 2),
+        (good_nodes[1], other_friends[0], 2),
+    ])
     
     # create interactions between good nodes
     # initial vouches of trust
@@ -44,7 +59,10 @@ def simulate1():
                     (source, target, hub_value),
                     (target, source, hub_value) 
                 ])
-                
+    
+    interactions.insert([
+        (good_nodes[1], good_nodes[0], 20000)
+    ])
     
     # for nid in bad_nodes:
     #     source = nid
@@ -57,15 +75,15 @@ def simulate1():
     
 
     # generate a sybil network of high trust
-    sybil_net = node_ids(10)
-    for nid in sybil_net:
-        value = 2
-        hub_value = len(good_nodes)
+    # sybil_net = node_ids(10)
+    # for nid in sybil_net:
+    #     value = 2
+    #     hub_value = len(good_nodes)
 
-        for target in sybil_net:
-            interactions.insert([
-                (nid, target, 20),
-            ])
+    #     for target in sybil_net:
+    #         interactions.insert([
+    #             (nid, target, 20),
+    #         ])
 
     interactions.insert([
         # ('1', '0', 1),
@@ -93,7 +111,7 @@ def simulate1():
     # print(rep.rep('0', '10') - rep.rep('10', '0'))
     # print()
     print(rep.R)
-    # calc_quorum(rep.R, rep.E)
+    calc_quorum(rep.R, rep.E)
 
 if __name__ == '__main__':
     # Run()
