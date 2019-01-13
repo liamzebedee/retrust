@@ -9,21 +9,22 @@ from shared import matplotlib_helpers
 
 from retrust.quorum import calc_quorum
 from retrust.interactions import InteractionsEngine
-from ebsl.reputation import EBSLReputationEngine
+from ebsl.reputation import EBSLReputationEngine, VisualisedEBSLReputationEngine
 
-from helpers import id_generator
+from simulation.helpers import NodeIdGenerator
+
 
 def simulate1(graph_path):
     interactions = InteractionsEngine()
 
-    node_ids = id_generator()
+    node_ids = NodeIdGenerator()
 
     # create a network of behaving nodes
     # create some bad nodes trying to infiltrate
     # estimate the cost of obtaining the trust of all good nodes
-    good_nodes = list(itertools.islice(node_ids, 10))
-    hub_node = next(node_ids)
-    bad_nodes = list(itertools.islice(node_ids, 10))
+    good_nodes = node_ids(10)
+    hub_node = node_ids(1)
+    bad_nodes = node_ids(10)
     
     # create interactions between good nodes
     # initial vouches of trust
@@ -56,7 +57,7 @@ def simulate1(graph_path):
     
 
     # generate a sybil network of high trust
-    sybil_net = list(itertools.islice(node_ids, 10))
+    sybil_net = node_ids(10)
     for nid in sybil_net:
         value = 2
         hub_value = len(good_nodes)
@@ -81,16 +82,19 @@ def simulate1(graph_path):
         # ('2', '10', 1),
     ])
 
-    rep = EBSLReputationEngine(interactions)
+    rep = VisualisedEBSLReputationEngine(interactions)
+    # rep = EBSLReputationEngine(interactions)
+
+
     # for nid in good_nodes:
     #     print(rep.rep(nid, '10'))
     #     print(rep.rep('10', nid))
 
     # print(rep.rep('0', '10') - rep.rep('10', '0'))
     # print()
-    calc_quorum(rep.R, rep.E)
+    # calc_quorum(rep.R, rep.E)
 
 if __name__ == '__main__':
     # Run()
     # print(sys.argv)
-    simulate1('networks/1-simple.interactions')
+    simulate1()

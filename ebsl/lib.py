@@ -153,7 +153,6 @@ def f_R(x, A):
         g = np.copy(A[i,j])
         
         for k in range(R.shape[0]):
-            # print("MULT {} {} {} {}".format(i, k, k, j))
 
             g = opinion_add(
                 g, 
@@ -162,7 +161,6 @@ def f_R(x, A):
 
         # R[i,j] = opinion_add(g, opinion(0.1, 0, 0.9))
         # R[i,j] = opinion_scalar_mult(.7, g)
-        # print("ADD {} {s}".format(i, j))
         R[i,j] = g
 
     
@@ -183,7 +181,6 @@ def f_R(x, A):
     # # Rotate the tick labels and set their alignment.
     # plt.setp(ax.get_xticklabels(), rotation=45, ha="right",
     #         rotation_mode="anchor")
-    # print("ITERATION")
     
     # for (i, j) in np.ndindex(R.shape[0], R.shape[1]):
     #     t = np.array2string(x[i, j, 0], precision=3, separator=',', suppress_small=True).split('.')[1]
@@ -192,3 +189,42 @@ def f_R(x, A):
     # plt.savefig(f'networks/{f_R_i}.repmatrix.png')
 
     return R
+
+
+
+def build_f_R_hooked(hook):
+    def f_R_hooked(x, A):
+        R = np.copy(x)
+
+        # square
+        assert(R.shape[0] == R.shape[1])
+
+        for (i, j) in np.ndindex(R.shape[0], R.shape[1]):
+            g = np.copy(A[i,j])
+            
+            for k in range(R.shape[0]):
+                hook("MULT {} {} {} {}".format(i, k, k, j))
+
+                g = opinion_add(
+                    g, 
+                    opinion_mult(R[i,k], A[k,j])
+                )
+
+            # R[i,j] = opinion_add(g, opinion(0.1, 0, 0.9))
+            # R[i,j] = opinion_scalar_mult(.7, g)
+            hook("ADD {} {}".format(i, j))
+            R[i,j] = g
+
+        
+        # fill diagonal
+        for i in np.ndindex(R.shape[0]):
+            R[i,i] = U
+        
+        fig, ax = plt.subplots()
+        ax.matshow(x[:,:,0], cmap=plt.cm.Blues)
+        
+        hook("ITERATION")
+
+        return R
+    
+    return f_R_hooked

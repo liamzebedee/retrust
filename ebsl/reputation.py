@@ -62,7 +62,6 @@ class EBSLReputationEngine(ReputationEngine):
         # 
         # 3. Converge opinions matrix.
         # 
-        # print("START {} {}".format(len(users), len(users)))
         configure_ebsl(reputations)
         direct_opinions = np.copy(reputations)
         worldview = optimize.fixed_point(
@@ -72,7 +71,6 @@ class EBSLReputationEngine(ReputationEngine):
             method="iteration",
             # xtol=1e-5
         )
-        # print("END")
         # print("worldview", worldview)
 
         evidence = np.full(
@@ -117,3 +115,97 @@ class EBSLReputationEngine(ReputationEngine):
     # Gets b's reputation from a's perspective
     def reputation_of(self, a, b):
         return self.R[self.users_idx(a), self.users_idx(a)]
+
+
+
+
+class VisualisedEBSLReputationEngine(ReputationEngine):
+    def __init__(self, interactions):
+        self.algo_logs = []
+        def algo_log(x):
+            self.algo_logs.append(x)
+
+        users = interactions.get_users()
+        self.users_idx = ListToMatrixIndexMapper(users)
+        
+        shape = (
+            len(users),
+            len(users),
+            3
+        )
+
+        # 
+        # 1. Convert interactions to evidence (aggregation)
+        # 
+        extracted_evidence = interactions.get_evidence()
+    
+
+        # 
+        # 2. Convert evidence to opinions and build reputations matrix.
+        # 
+        reputations = np.full(
+            shape, 
+            U,
+            dtype=np.float64
+        )
+
+        initial_evidence = np.full(
+            (
+                len(users),
+                len(users),
+                2
+            ),
+            np.array((0, 0)),
+            dtype=np.int32
+        )
+
+        for (src, target, positive, negative, total) in extracted_evidence:
+            i = self.users_idx(src)
+            j = self.users_idx(target)
+            initial_evidence[i, j] = np.array((positive, negative))
+            reputations[i, j] = to_opinion(positive, negative, total)
+        
+        # 
+        # 3. Converge opinions matrix.
+        # 
+        algo_log("START {} {}".format(len(users), len(users)))
+
+        configure_ebsl(reputations)
+        direct_opinions = np.copy(reputations)
+        worldview = optimize.fixed_point(
+            build_f_R_hooked(algo_log), 
+            reputations, 
+            args=(direct_opinions,), 
+            method="iteration",
+            # xtol=1e-5
+        )
+        algo_log("END")
+
+        # print("worldview", worldview)
+
+        evidence = np.full(
+            (
+                len(users),
+                len(users),
+                2
+            ),
+            np.array((0, 0)),
+            dtype=np.int32
+        )
+
+        for (i, j) in np.ndindex(worldview.shape[0], worldview.shape[1]):
+            evidence[i,j] = to_evidence(worldview[i,j])
+
+        self.R = worldview
+        self.E = evidence
+
+        print(self.algo_logs)
+
+    # Get the reputation opinions of every user in the system from a's perspective
+    def perspective(self, a):
+        return self.R[self.users_idx(a)]
+    
+    # Gets b's reputation from a's perspective
+    def reputation_of(self, a, b):
+        return self.R[self.users_idx(a), self.users_idx(a)]
+
