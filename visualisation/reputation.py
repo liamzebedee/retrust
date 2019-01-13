@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
 from matplotlib.animation import FFMpegWriter
+import matplotlib.ticker as ticker
 
 
 import pandas as pd
@@ -33,7 +34,9 @@ def build_f_R_hooked(hook):
         assert(R.shape[0] == R.shape[1])
 
         for (i, j) in np.ndindex(R.shape[0], R.shape[1]):
-            hook("JUDGE", (i, j), R)
+            if i == j:
+                continue
+            hook("JUDGE", (i, j), R.copy())
             g = np.copy(A[i,j])
             
             for k in range(R.shape[0]):
@@ -42,7 +45,7 @@ def build_f_R_hooked(hook):
                     opinion_mult(R[i,k], A[k,j])
                 )
 
-                hook("MULT", (i, k, k, j), R)
+                hook("MULT", (i, k, k, j), R.copy())
 
             # R[i,j] = opinion_add(g, opinion(0.1, 0, 0.9))
             # R[i,j] = opinion_scalar_mult(.7, g)
@@ -64,6 +67,7 @@ def build_f_R_hooked(hook):
 converge_i = 0
 node_perspective = 0
 node_judged = 0
+
 class VisualisedEBSLReputationEngine(ReputationEngine):
     def __init__(self, interactions):
         self.algo_logs = []
@@ -117,44 +121,33 @@ class VisualisedEBSLReputationEngine(ReputationEngine):
         # setup animation
         ims = []
 
-        def setup_plt(dataframe, col_width=3.0, row_height=0.625, 
-                            row_color="w", edge_color="black", 
-                            ax=None, highlight_color="mediumpurple",
-                            highlights=[], **kwargs):
-            if ax is None:
-                size = (np.array(dataframe.shape[::-1]) + np.array([0, 1])) * np.array([col_width, row_height])
-                fig, ax = plt.subplots(figsize=size)
-                ax.axis('off')
-
-            return fig, ax
-
-        # width = 8
-        # data_np = np.zeros(shape=(4,4))
-        data = None
-        table = None
-        def get_dataframe(nparr=reputations, bbox=[0, 0, 1, 1], font_size=14,):
+        # ticks = list(reversed(range(shape[0])))
+        def get_dataframe(nparr=reputations, bbox=[0, 0, 1, 1]):
             data = pd.DataFrame.from_records(nparr)
-            table = ax.table(cellText=data.values, bbox=bbox)
+            self.mpl_R_table = ax_R.table(cellText=data.values, bbox=bbox)
+            # self.mpl_R_table.xlabel('')
 
-            table.auto_set_font_size(False)
-            table.set_fontsize(font_size)
+            ax_R.set_ylabel('Node perspective')
+            # ax_R.xaxis.set_major_locator(ticker.IndexLocator(base=1., offset=0.))
 
-            return table
-        
-        # buf = io.BytesIO()
 
-        # def save_frame():
-        #     fig.savefig(buf, format='svg')
-        #     ims.append([
-        #         # fig
-        #         # fig.savefig(buf, format='svg')
-                
-        #     ])
+            self.mpl_R_table.auto_set_font_size(True)
 
-        fig, ax = setup_plt(pd.DataFrame.from_records(reputations))
-        
-        # im = plt.show(fig)
-        # save_frame()
+            return self.mpl_R_table
+    
+
+        fig = plt.figure(figsize=(12,4), tight_layout=True)
+        ax_R = fig.add_subplot(121)
+        ax_A = fig.add_subplot(122)
+        ax_R.tick_params(axis='both', which='both', bottom='off', top='off', labelbottom='off', right='off', left='off', labelleft='off')
+        ax_A.tick_params(axis='both', which='both', bottom='off', top='off', labelbottom='off', right='off', left='off', labelleft='off')
+        # ax_A.set_xticks(ticks)
+        # ax_A.set_yticks(ticks)
+        # ax_info = fig.add_subplot(333)
+
+
+        self.mpl_A_table = ax_A.table(cellText=pd.DataFrame.from_records(reputations).values, bbox=[0, 0, 1, 1])
+        self.mpl_A_table.auto_set_font_size(True)
 
 
         configure_ebsl(reputations)
@@ -163,24 +156,25 @@ class VisualisedEBSLReputationEngine(ReputationEngine):
             build_f_R_hooked(algo_log), 
             reputations, 
             args=(direct_opinions,), 
-            method="iteration",
+            # method="iteration",
             # xtol=1e-5
         )
 
         # now animate everything that happened
         
         def updatefig(idx):
-            global converge_i, node_perspective, node_judged
-            ax.clear()
+            global converge_i, node_perspective, node_judged, mpl_A_table
+            ax_R.clear()
+            # ax_info.clear()
 
-            # for idx, log in enumerate(self.algo_logs):
             print(float(idx / len(self.algo_logs)) * 100, len(self.algo_logs))
             action, data, new_R = self.algo_logs[idx]
 
-            mpl_table = get_dataframe(new_R)
-            # mpl_table = table
+            self.mpl_R_table = get_dataframe(new_R)
  
-            for k, cell in six.iteritems(mpl_table._cells):
+            for k, cell in six.iteritems(self.mpl_R_table._cells):
+                cell.set_facecolor('w')
+            for k, cell in six.iteritems(self.mpl_A_table._cells):
                 cell.set_facecolor('w')
             
             if action == 'ITERATION':
@@ -189,32 +183,30 @@ class VisualisedEBSLReputationEngine(ReputationEngine):
                 node_perspective, node_judged = data
             elif action == 'MULT':
                 i, j, k, l = data
-                if i == l and j == k:
-                    mpl_table._cells[i,j].set_facecolor('hotpink')
-                else:
-                    mpl_table._cells[i,j].set_facecolor('lightpink')
-                    mpl_table._cells[k,l].set_facecolor('lightpink')
+                self.mpl_R_table._cells[i,j].set_facecolor('lightpink')
+                self.mpl_A_table._cells[k,l].set_facecolor('lightpink')
 
-            mpl_table._cells[node_perspective,node_judged].set_facecolor('lightblue')
+            self.mpl_R_table._cells[node_perspective,node_judged].set_facecolor('lightblue')
 
-            ax.set_title('Reputation matrix')
-            t = plt.text(0, 0, '\n'.join([
-                'Convergence round {}'.format(converge_i),
-                'Current node perspective - {}'.format(node_perspective),
-                'Examining node - {}'.format(node_judged)
-            ]), bbox={'facecolor':'white'})
+            ax_R.set_title('Reputation matrix ' + r'$R_{'+str(converge_i)+r'}$')
+            ax_A.set_title('Initial reputation matrix ' + r'$A$')
+            # ax_A.text(1, 1, '\n'.join([
+            #     'Convergence round {}'.format(converge_i),
+            #     # 'Current node perspective - {}'.format(node_perspective),
+            #     # 'Examining node - {}'.format(node_judged)
+            # ]), bbox={'facecolor':'white'})
             
 
-            return [ax]
+            return [ax_R, ax_A,]
 
 
         # ani = animation.ArtistAnimation(fig, ims, interval=50, blit=True,
         #                         repeat_delay=1000)
         # writer = FFMpegWriter(fps=15, metadata=dict(artist='Me'), bitrate=1800)
         # ani.save("movie.mp4", writer=writer)
-        anim = animation.FuncAnimation(fig, updatefig, len(self.algo_logs), blit=True, save_count=1)
-        # anim.save("test.mp4", fps=60)
-        plt.show()
+        anim = animation.FuncAnimation(fig, updatefig, len(self.algo_logs), blit=False, save_count=1)
+        anim.save("test.mp4", fps=15)
+        # plt.show()
 
 
         # evidence = np.full(

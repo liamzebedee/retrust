@@ -92,7 +92,8 @@ def simulate1():
 
     # print(rep.rep('0', '10') - rep.rep('10', '0'))
     # print()
-    calc_quorum(rep.R, rep.E)
+    print(rep.R)
+    # calc_quorum(rep.R, rep.E)
 
 if __name__ == '__main__':
     # Run()

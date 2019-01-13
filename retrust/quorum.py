@@ -70,7 +70,7 @@ def f_E(x, A):
     #     E[i,i] = 1
     
 
-    for (i, j) in np.ndindex(x.shape[0], x.shape[1]):
+    # for (i, j) in np.ndindex(x.shape[0], x.shape[1]):
         # g = np.copy(A[i,j])
         
         # for k in range(x.shape[0]):
@@ -81,7 +81,7 @@ def f_E(x, A):
 
         # E[i,j] = ((1 - d) / np.size(A[i,:])) * (x[i,j] + A[i,:].mean()) + d
         # E[i,j] = (x[i,] + A[i,:].mean())
-        E[i,j] = A[i,j] + E[:,].mean()
+        # E[i,j] = A[i,j] + E[:,].mean()
     
     
 
