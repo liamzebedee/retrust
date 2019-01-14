@@ -23,7 +23,7 @@ def simulate1():
     # create some bad nodes trying to infiltrate
     # estimate the cost of obtaining the trust of all good nodes
     good_nodes = node_ids(3)
-    other_friends = node_ids(3)
+    other_friends = node_ids(6)
     hub_node = node_ids(1)
     # bad_nodes = node_ids(10)
 
@@ -61,7 +61,8 @@ def simulate1():
                 ])
     
     interactions.insert([
-        (good_nodes[1], good_nodes[0], 20000)
+        # (good_nodes[1], good_nodes[0], 20000),
+        # (good_nodes[2], good_nodes[1], 20000)
     ])
     
     # for nid in bad_nodes:
@@ -75,14 +76,17 @@ def simulate1():
     
 
     # generate a sybil network of high trust
-    # sybil_net = node_ids(10)
+    sybil_net = node_ids(20)
+    interactions.insert([
+        (nid, target, value) for target in sybil_net for nid in sybil_net
+    ])
+
     # for nid in sybil_net:
     #     value = 2
-    #     hub_value = len(good_nodes)
 
     #     for target in sybil_net:
     #         interactions.insert([
-    #             (nid, target, 20),
+    #             (nid, target, value),
     #         ])
 
     interactions.insert([
