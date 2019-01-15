@@ -5,7 +5,7 @@ Retrust is a WIP protocol for decentralised reputation/trust, based on [Evidence
 
 Properties still being investigated:
  * **Sybil-resistance**: a flow-based trust algorithm is computed from the perspective of each node.
- * **Quorum-based resolution**: interactions are converted to evidence in the form of `(positive, negative)` - it is likely possible we can use this to rank the effective trust of a node in a network, and thus use this to implement true holocratic voting.
+ * **Quorum-based holocracy**: by building a weighted graph of interactions between nodes, that is automatically scaled based on the reputation of each node - we can use another flow-based algorithm such as PageRank, to compute the true influence of a node in a network, and thus use this to implement true holocratic voting.
 
 ## Organisation
  - `ebsl/` - evidence-based subjective logic implementations (original and my refactored version with Numpy)
@@ -13,6 +13,11 @@ Properties still being investigated:
  - `simulation/` - code for simulating behaviour of the different engines
  - `contracts/` - Solidity smart contracts
  - `visualisation/` - matplotlib-based visualisation code, used within simulation/ and datasets/
+
+## Experiment
+```
+python -m simulation.main
+```
 
 ## Developments
 In chronological order:
@@ -26,7 +31,8 @@ In chronological order:
  - [Protocol brainstorms (Dec)](https://hackmd.io/m8MARMuuRHKZFw9xyQIH9Q), [Reputation as economic mechanism (Dec)](https://hackmd.io/3UVGjqBhSDKsr85nYiiIsw)
  - [Evidence-Based Subjective Logic (EBSL) reimplemented in Python with Numpy (Dec)](https://github.com/liamzebedee/retrust/tree/3933ecf076a775d566d7a07349bd6d46f3c0e002/vis/trust2)
  - [Discussions with Abram Simons of BrightID (Dec)](https://www.reddit.com/r/idealmoney/comments/a9croi/deriving_a_reliable_trust_protocol_that_scales_to/)
- - Matplotlib animation of EBSL algorithm (`python -m visualisation.main`)
+ - Matplotlib animation of EBSL algorithm (`python -m visualisation.main`) - also see in `docs/algovis.mp4` (Jan 2019)
+ - [Preliminary implementation](https://github.com/liamzebedee/retrust/commit/4f53c10b88a262c47bcf538830e2b2f802c19935) of the quorum mechanism with NetworkX's PageRank algo (Jan 2019)
 
 ## Resources
  - “decentralized sybil resistant identity” at Devcon4. Read the [reputation jam tweetstorm](https://twitter.com/sinahab/status/1027640621110984704)
@@ -48,4 +54,5 @@ In chronological order:
  - P2P Scihub
  - reputation as an alternative to economic stake in eg. curation markets
  - education/accreditation platform (Mick)
- 
+ - reputation of news sources
+ - beating fake reviews (eg Amazon)

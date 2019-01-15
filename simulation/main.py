@@ -23,7 +23,7 @@ def simulate1():
     # create some bad nodes trying to infiltrate
     # estimate the cost of obtaining the trust of all good nodes
     good_nodes = node_ids(3)
-    other_friends = node_ids(6)
+    other_friends = node_ids(3)
     hub_node = node_ids(1)
     # bad_nodes = node_ids(10)
 
