@@ -33,6 +33,7 @@ In chronological order:
  - [Discussions with Abram Simons of BrightID (Dec)](https://www.reddit.com/r/idealmoney/comments/a9croi/deriving_a_reliable_trust_protocol_that_scales_to/)
  - Matplotlib animation of EBSL algorithm (`python -m visualisation.main`) - also see in `docs/algovis.mp4` (Jan 2019)
  - [Preliminary implementation](https://github.com/liamzebedee/retrust/commit/4f53c10b88a262c47bcf538830e2b2f802c19935) of the quorum mechanism with NetworkX's PageRank algo (Jan 2019)
+ - Use case exploration with decentralised Uber (Jan 2019)
 
 ## Resources
  - “decentralized sybil resistant identity” at Devcon4. Read the [reputation jam tweetstorm](https://twitter.com/sinahab/status/1027640621110984704)
