@@ -12,5 +12,3 @@ class Rider(User):
 class Driver(User):
     def __init__(self):
         super().__init__()
-
-
