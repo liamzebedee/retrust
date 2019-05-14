@@ -58,3 +58,7 @@ In chronological order:
  - education/accreditation platform (Mick)
  - reputation of news sources
  - beating fake reviews (eg Amazon)
+
+#### Related projects
+ - [yKarma](https://github.com/rezendi/ykarma)
+ - [sourcecred](https://sourcecred.io/)
