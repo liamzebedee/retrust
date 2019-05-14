@@ -43,6 +43,7 @@ In chronological order:
  - Relative vs. Absolute trust measures. 
  - https://www.youtube.com/watch?v=ZbgDFXxmNuk
  - [Tribler's research on consensus trust](https://github.com/Tribler/tribler/issues/3357), [some simulations on 'personalised' PageRank](https://github.com/Tribler/tribler/issues/2805) ([code](https://github.com/alexander-stannat/Incremental-Pagerank))
+ - Blockscience's [multi-class personalised PageRank](https://github.com/sourcecred/research/blob/master/references/multiclassPageRank.md)
 
 ### Applications
  - Proof of personhood https://github.com/protocol/research/issues/11
