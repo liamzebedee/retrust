@@ -58,6 +58,9 @@ In chronological order:
  - Relative vs. Absolute trust measures. 
  - https://www.youtube.com/watch?v=ZbgDFXxmNuk
  - [Tribler's research on consensus trust](https://github.com/Tribler/tribler/issues/3357), [some simulations on 'personalised' PageRank](https://github.com/Tribler/tribler/issues/2805) ([code](https://github.com/alexander-stannat/Incremental-Pagerank))
+ - Blockscience's [multi-class personalised PageRank](https://github.com/sourcecred/research/blob/master/references/multiclassPageRank.md)
+ - [Ethereum Magician's thread](https://ethereum-magicians.org/t/forgiveness-reputation-and-transparency-what-are-the-questions/1881)
+ - [Reputation Systems: Promise and Peril](http://kronosapiens.github.io/blog/2018/06/29/reputation-promise-peril.html)
 
 ### Applications
  - Proof of personhood https://github.com/protocol/research/issues/11
@@ -73,3 +76,7 @@ In chronological order:
  - reputation of news sources
  - beating fake reviews (eg Amazon)
  - crypto co-operatives based on the ideas of coliability
+
+#### Related projects
+ - [yKarma](https://github.com/rezendi/ykarma)
+ - [sourcecred](https://sourcecred.io/)
