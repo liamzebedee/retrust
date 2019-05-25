@@ -1,3 +1,8 @@
+retrust
+=======
+
+[**\Checkout the compendium!**](https://docs.google.com/document/d/1Rg-GLxpxgVBYDTHEXvlAxMc4459E9j4BZME6Fj6deJo/edit)
+
 Retrust is an R&D project into decentralised reputation. It uses an algorithm called [Evidence-Based Subjective Logic](https://arxiv.org/abs/1402.3319) (EBSL) for **subjective consensus** on governing value. It's sybil-resistant and oriented around a one-way flow of governing an ecosystem's norms and rewarding value creators based on a power-weighted consensus.
 
 ### The current inefficiency of TCR's
