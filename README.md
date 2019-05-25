@@ -1,11 +1,19 @@
+Retrust is an R&D project into decentralised reputation. It uses an algorithm called [Evidence-Based Subjective Logic](https://arxiv.org/abs/1402.3319) (EBSL) for **subjective consensus** on governing value. It's sybil-resistant and oriented around a one-way flow of governing an ecosystem's norms and rewarding value creators based on a power-weighted consensus.
 
-Retrust is a WIP protocol for decentralised reputation/trust, based on [Evidence-Based Subjective Logic](https://arxiv.org/abs/1402.3319) (EBSL):
- * **Interaction-based**: reputation is based on generic interactions of the form, (source, target, value). There is no need to specify trusted friends/seeds, nor keep this information updated, as it is automatically derived from interactions.
- * **Application-agnostic**: reputation is a [subjective-logic opinion](https://en.wikipedia.org/wiki/Subjective_logic) of `(belief, disbelief, uncertainty)` - which can model any quality of reliability in interaction.
+### The current inefficiency of TCR's
+Token Curated Registries are an example of where Retrust can shine:
+ * an ecosystem around curating a registry of information is created by issuing a token
+ * staking incentivises highly-curated registries, as well as increasing value of the token
+ * however - tokens are either fixed in supply, or issued by some sort of bonding curve. 
+ * essentially, the token is used to mitigate sybil attacks, or the 'unfair' cultivation of power.
 
-Properties still being investigated:
- * **Sybil-resistance**: a flow-based trust algorithm is computed from the perspective of each node.
- * **Quorum-based holocracy**: by building a weighted graph of interactions between nodes, that is automatically scaled based on the reputation of each node - we can use another flow-based algorithm such as PageRank, to compute the true influence of a node in a network, and thus use this to implement true holocratic voting.
+Essentially, we are using a token to achieve consensus on a subjective criteria (a *"good registry"*). The problem is that in order to curtail sybils from ruining the communal ecosystem value, we are limiting the ecosystem based on economics, rather than **generating value** we are **trading value**.
+
+In Retrust, value is generated continuously according to the subjective consensus of shareholders. And in turn, the value you have contributed determines your sharepower. It is a one-way flow of governance that insures existing sharepower governs how the ecosystem grows its value. 
+
+How do we ensure the value is kept 'sane'? How do we make sure the majority shareholder doesn't just sell their stake? This will vary from ecosystem to ecosystem, and I envision a variety of mechanisms will exist on top of sharepower - ie. staking which scales power according to time locked. 
+
+The important contribution to understand is that we are inverting the mechanisms of governing. Rather than the token's value coming from the gameplay of the TCR, the TCR is governed by who created it and continues contributing value to it. 
 
 ## Organisation
  - `ebsl/` - evidence-based subjective logic implementations (original and my refactored version with Numpy)
@@ -15,7 +23,13 @@ Properties still being investigated:
  - `visualisation/` - matplotlib-based visualisation code, used within simulation/ and datasets/
 
 ## Experiment
+Install [Anaconda](https://www.anaconda.com), which handles Python version and dependencies.
+
 ```
+# Activate the Anaconda environment
+conda activate
+
+# Run simulation
 python -m simulation.main
 ```
 
@@ -34,6 +48,7 @@ In chronological order:
  - Matplotlib animation of EBSL algorithm (`python -m visualisation.main`) - also see in `docs/algovis.mp4` (Jan 2019)
  - [Preliminary implementation](https://github.com/liamzebedee/retrust/commit/4f53c10b88a262c47bcf538830e2b2f802c19935) of the quorum mechanism with NetworkX's PageRank algo (Jan 2019)
  - Use case exploration with decentralised Uber (Jan 2019)
+ - Shift from reputation into the more general concepts of risk, governance and subjective consensus. See this [lightpaper](https://docs.google.com/document/d/1qbESkHU984D4_uf1ghIDa4hPcaevtRBa0KqRJbZnR_w/edit?usp=sharing) (May 2019)
 
 ## Resources
  - “decentralized sybil resistant identity” at Devcon4. Read the [reputation jam tweetstorm](https://twitter.com/sinahab/status/1027640621110984704)
@@ -57,3 +72,4 @@ In chronological order:
  - education/accreditation platform (Mick)
  - reputation of news sources
  - beating fake reviews (eg Amazon)
+ - crypto co-operatives based on the ideas of coliability
