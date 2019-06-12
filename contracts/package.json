@@ -1,0 +1,5 @@
+{
+  "dependencies": {
+    "embark": "^3.2.7"
+  }
+}
