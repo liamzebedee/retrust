@@ -16,14 +16,17 @@ contract EBSL {
     uint constant xtol = 1 * 10^3;
 
     TrustToken trust;
+    EBSLCore core;
 
     uint168[3][][] opinionsMatrix;
 
-    using EBSLCore for uint168;
+    // using core for uint168;
 
     constructor(
+        address _core,
         address _trustToken
     ) public {
+        core = EBSLCore(_core);
         trust = TrustToken(_trustToken);
     }
 
@@ -60,7 +63,7 @@ contract EBSL {
         // Now fill matrix
         for(uint i = 0; i < users.length; i++) {
             for(uint j = 0; j < users.length; j++) {
-                matrix[i][j] = EBSLCore.to_opinion(
+                matrix[i][j] = core.to_opinion(
                     trust.getTrust(users[i], users[j])
                 );
             }
@@ -83,9 +86,9 @@ contract EBSL {
                 uint168[3] memory opinion = m[i][j];
 
                 for(uint k = 0; k < n; k++) {
-                    opinion = EBSLCore.opinion_add(
+                    opinion = core.opinion_add(
                         opinion,
-                        EBSLCore.opinion_generic_discount(
+                        core.opinion_generic_discount(
                             m[i][k],
                             m[k][j]
                         )
@@ -113,7 +116,7 @@ contract EBSL {
             for(uint j = 0; j < n; j++) {
                 for(uint k = 0; k < 3; k++) {
                     require(
-                        EBSLCore.check_xtol(m[i][j][k], m_prime[i][j][k]),
+                        core.check_xtol(m[i][j][k], m_prime[i][j][k]),
                         "xtol not valid"
                     );
                 }
@@ -135,7 +138,7 @@ contract EBSL {
             for(uint i = 0; i < n; i++) {
                 for(uint j = 0; j < n; j++) {
                     for(uint k = 0; k < 3; k++) {
-                        converged = converged && EBSLCore.check_xtol(m[i][j][k], m_prime[i][j][k]);
+                        converged = converged && core.check_xtol(m[i][j][k], m_prime[i][j][k]);
                     }
                 }
             }
