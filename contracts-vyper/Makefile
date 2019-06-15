@@ -1,0 +1,1 @@
+all    :; vyper ebsl.vy > ebsl.bytecode

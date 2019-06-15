@@ -60,8 +60,9 @@ class EBSLReputationEngine(ReputationEngine):
             f_R, 
             reputations, 
             args=(direct_opinions,), 
-            method="iteration",
-            # xtol=1e-5
+            # method="iteration", 
+            method="del2",
+            xtol=1e-3
         )
         # print("worldview", worldview)
 
@@ -77,6 +78,9 @@ class EBSLReputationEngine(ReputationEngine):
 
         for (i, j) in np.ndindex(worldview.shape[0], worldview.shape[1]):
             evidence[i,j] = to_evidence(worldview[i,j])
+
+
+
 
         # print(evidence - initial_evidence)
 
@@ -107,3 +111,6 @@ class EBSLReputationEngine(ReputationEngine):
     # Gets b's reputation from a's perspective
     def reputation_of(self, a, b):
         return self.R[self.users_idx(a), self.users_idx(a)]
+    
+    def reload(self, interactions):
+        self = self.__init__(interactions)

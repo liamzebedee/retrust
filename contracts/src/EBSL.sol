@@ -2,18 +2,31 @@ pragma solidity ^0.5.6;
 
 pragma experimental ABIEncoderV2;
 
-import "ds-math/math.sol";
 
-contract EBSL is DSMath {
+import "./EBSLCore.sol";
+import "./TrustToken.sol";
 
-    // using DSMath for uint64;
-    // using DSMath for uint256;
+contract EBSL {
 
     uint64 constant C = 2;
     uint constant b = 0;
     uint constant d = 1;
     uint constant u = 2;
-    
+
+    uint constant xtol = 1 * 10^3;
+
+    TrustToken trust;
+
+    uint168[3][][] opinionsMatrix;
+
+    using EBSLCore for uint168;
+
+    constructor(
+        address _trustToken
+    ) public {
+        trust = TrustToken(_trustToken);
+    }
+
     function to_evidence(
         uint64[3] memory x
     )
@@ -25,97 +38,125 @@ contract EBSL is DSMath {
         return (pos, neg);
     }
 
-    function to_opinion(
-        uint64[2] memory e
-    )
-        public pure
-        returns (uint[3] memory x)
-    {
-        uint sum = e[0] + e[1] + C;
+    function buildMatrix() internal returns (uint168[3][][] memory matrix) {
+        // go through every account in the system
+        // set their address?
+        // or maybe we can just store the matrix here
 
-        x[0] = wdiv(e[0], sum);
-        x[1] = wdiv(e[1], sum);
-        x[2] = wdiv(C, sum);
-    
-        return x;
+        // for all users
+        // convert their tokens into evidence
+        // build matrix
+
+
+        // First get users
+        address[] memory users = new address[](trust.getUserCount());
+
+        for(uint i = 0; i < users.length; i++) {
+            users[i] = (trust.getUser(i));
+        }
+
+        matrix = new uint168[3][][](3);
+
+        // Now fill matrix
+        for(uint i = 0; i < users.length; i++) {
+            for(uint j = 0; j < users.length; j++) {
+                matrix[i][j] = EBSLCore.to_opinion(
+                    trust.getTrust(users[i], users[j])
+                );
+            }
+        }
+
+        return matrix;
     }
 
-    function opinion_add(
-        uint[3] memory x,
-        uint[3] memory y
-    )
-        public pure
-        returns (uint[3] memory z)
-    {
-        //     divisor =       (x_u + y_u)  -  (x_u * y_u)
-        uint divisor = sub(add(x[u], y[u]), wmul(x[u], y[u]));
-
-        //     (x_b, x_d, x_u) = x
-        //     (y_b, y_d, y_u) = y
-        
-        //     b = ( x_u * y_b  +  y_u * x_b ) / divisor
-        z[b] = wdiv( 
-            add( 
-                wmul(x[u], y[b]),  
-                wmul(y[u], x[b]) 
-            ),
-            divisor
-        ); 
-        //     d = ( x_u * y_d  +  y_u * x_d ) / divisor
-        z[d] = wdiv( 
-            add( 
-                wmul(x[u], y[d]),  
-                wmul(y[u], x[d]) 
-            ),
-            divisor
-        ); 
-        //     u = x_u * y_u / divisor
-        z[u] = wdiv(
-            wmul(x[u], y[u]),
-            divisor
-        );
-
-        return z;
-    }
-
-    function opinion_scalar_mult(uint a, uint[3] memory x) public pure returns (uint[3] memory z) {
-        // # Scalar mult basically multiplies against (b,d)
-        // # And then normalises.
-        // (b, d, u) = x
-        // divisor = a * (b + d) + u
-        uint divisor = add(
-            wmul(
-                a,
-                add(x[b], x[d])
-            ),
-            x[u]
-        );
-        // return opinion(b*a / divisor, d*a / divisor, u / divisor)
-        z[b] = wdiv(wmul(x[b], a), divisor);
-        z[d] = wdiv(wmul(x[d], a), divisor);
-        z[u] = wdiv(x[u], divisor);
-        return z;
-    }
 
     function ebsl_F(
-        uint64[][][] memory m
-    ) public {
-        for(uint i = 0; i < m.length; i++) {
-            for(uint j = 0; j < m[0].length; j++) {
+        uint168[3][][] memory m
+    )
+        public
+        returns (uint168[3][][] memory)
+    {
+        uint n = m.length;
 
+        for(uint i = 0; i < n; i++) {
+            for(uint j = 0; j < n; j++) {
+                uint168[3] memory opinion = m[i][j];
+
+                for(uint k = 0; k < n; k++) {
+                    opinion = EBSLCore.opinion_add(
+                        opinion,
+                        EBSLCore.opinion_generic_discount(
+                            m[i][k],
+                            m[k][j]
+                        )
+                    );
+                }
+
+                m[i][j] = opinion;
+            }
+        }
+
+        return m;
+    }
+
+    function verifyEbslProof(
+        uint168[3][][] memory m
+    )
+        public
+        returns (uint168[3][][] memory)
+    {
+        uint168[3][][] memory m_prime = ebsl_F(buildMatrix());
+        
+        // now compare difference
+        uint n = m.length;
+        for(uint i = 0; i < n; i++) {
+            for(uint j = 0; j < n; j++) {
+                for(uint k = 0; k < 3; k++) {
+                    require(
+                        EBSLCore.check_xtol(m[i][j][k], m_prime[i][j][k]),
+                        "xtol not valid"
+                    );
+                }
             }
         }
     }
 
-    function ebslConverge(
-        uint64[][][] memory m
+    function ebslConverge()
+        public
+        returns (uint168[3][][] memory)
+    {
+        uint168[3][][] memory m = buildMatrix();
+        uint n = m.length;
+
+        while(true) {
+            uint168[3][][] memory m_prime = ebsl_F(m);
+
+            bool converged = true;
+            for(uint i = 0; i < n; i++) {
+                for(uint j = 0; j < n; j++) {
+                    for(uint k = 0; k < 3; k++) {
+                        converged = converged && EBSLCore.check_xtol(m[i][j][k], m_prime[i][j][k]);
+                    }
+                }
+            }
+
+            if(converged) break;
+            else {
+                m = m_prime;
+            }
+        }
+
+        return m;
+    }
+
+    function ebslConverge2(
     )
         public
     {
-        // find the fixed point of the matrix
-        // or prove it?
-        
-        // 1e-3
-        uint xtol = 1 * 10^3;
+        opinionsMatrix = ebslConverge();
+    }
+
+    function getOpinion(address from, address of_) external view returns (uint168[3] memory) {
+        return opinionsMatrix[trust.getUserIdx(from)][trust.getUserIdx(of_)];
     }
 }

@@ -127,7 +127,9 @@ f_R_i = 0
 def f_R(x, A):
     global f_R_i
     f_R_i += 1
-    R = np.copy(x)
+    print(f_R_i)
+    # R = np.copy(x)
+    R = x
 
     # square
     assert(R.shape[0] == R.shape[1])
