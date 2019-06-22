@@ -1,0 +1,12 @@
+#!/bin/sh
+# set -ex
+
+# decimal is fixed168x10
+# fixed<M>x<N>
+# v * 10 ** N
+# M = 168, N = 10
+
+# convert to number
+NUM=$(seth --to-dec $1)
+
+echo $(bc <<< 'scale=10;'$NUM' / (10^10)')
