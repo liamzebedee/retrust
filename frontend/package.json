@@ -1,0 +1,19 @@
+{
+    "scripts": {
+        "dev": "next",
+        "build": "next build",
+        "start": "next start"
+    },
+    "dependencies": {
+        "next": "^8.1.0",
+        "normalize.css": "^8.0.1",
+        "react": "^16.8.6",
+        "react-dom": "^16.8.6",
+        "react-redux": "^7.1.0",
+        "redux": "^4.0.1",
+        "styled-components": "^5.0.0-beta.5"
+    },
+    "devDependencies": {
+        "babel-plugin-styled-components": "^1.10.2"
+    }
+}
