@@ -1,6 +1,10 @@
 
 
-contract TrustToken {
+contract VoteToken {
+    // Mapping from user -> post -> vote
+    mapping(address => mapping(bytes32 => int128)) votes;
+    
+
     uint256 userCount = 0;
     mapping(uint    => address) usersReverse;
     mapping(address => uint) users;
