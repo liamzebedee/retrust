@@ -49,21 +49,20 @@ const Total = styled.span``
 
 function Results({ results }) {
     return <div>
-        {results.map(Result)}
+        {results.map(result => <Result key={result.url} {...result}/>)}
     </div>
 }
 
-function parseLink(link) {
-    let parts = link.split(':')
+function parseLink(url) {
+    let parts = url.split(':')
     const protocol = parts[0]
     return <Link>
-        <a href={link}><b>{protocol}</b>:{parts.slice(1).join(':')}</a>
+        <a href={url}><b>{protocol}</b>:{parts.slice(1).join(':')}</a>
     </Link>
 }
 
-function Result({ total, link }) {
+function Result({ total, url }) {
     return <ResultStyle>
-
         <VotePane>
             <UpVoteIcon className="fas fa-arrow-up"/>
             <Total>{total}</Total>
@@ -71,7 +70,7 @@ function Result({ total, link }) {
         </VotePane>
 
         <ResultBody>
-            {parseLink(link)}
+            {parseLink(url)}
         </ResultBody>
     </ResultStyle>
 }

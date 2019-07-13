@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { search } from "../actions";
 import { connect } from 'react-redux'
+import Router from 'next/router'
 
 import styled from 'styled-components';
 const SearchBox = styled.input`
-    width: 400px;
+    width: 600px;
     height: 40px;
     padding: 0.25em 0.5em;
 `
@@ -14,7 +15,8 @@ const Search = ({ dispatch }) => {
 
     function onKeyPress(event) {
         if(event.key === 'Enter') {
-            dispatch(search(searchQuery))
+            // dispatch(search(searchQuery))
+            Router.push(`/entry/${searchQuery}`)
         }
     }
 

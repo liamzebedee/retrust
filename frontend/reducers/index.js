@@ -18,11 +18,41 @@ let mockEntry = {
     results: mockResults
 }
 
-const initial = {
-    entry: mockEntry,
-    query: "Bitcoin: A Peer-to-Peer Electronic Cash System"
+const mockUser = {
+    username: 'liamz',
+    reputation: 1200
 }
 
-export default function reduce(state = initial, action) {
-    return initial
+const initial = {
+    query: "Bitcoin: A Peer-to-Peer Electronic Cash System",
+    user: mockUser
 }
+
+function user(state = {}, action) {
+    return mockUser
+}
+
+import { LOAD_NEWEST_ENTRIES_COMPLETE } from '../actions/registry'
+
+
+function misc(state = { newestEntries: [] }, action) {
+    switch(action.type) { 
+        case LOAD_NEWEST_ENTRIES_COMPLETE:
+            return {
+                ...state,
+                newestEntries: action.results
+            }
+        default:
+            return state
+    }
+}
+
+import entry from './entry'
+
+import { combineReducers } from 'redux'
+
+export default combineReducers({
+    user,
+    entry,
+    misc
+})

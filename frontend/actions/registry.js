@@ -1,10 +1,81 @@
-function loadEntries(key) {
+import Web3 from 'web3'
+const web3 = new Web3('http://localhost:8545' , null, {});
+// || Web3.givenProvider
+
+// const { readFileSync } = require('fs')
+
+const registry = new web3.eth.Contract(
+    require('../../contracts/out/Registry.json'),
+    require('../../contracts/deploy/Registry.js')
+)
+
+export const LOAD_ENTRY_PROGRESS = 'LOAD_ENTRY_PROGRESS'
+export const LOAD_ENTRY_COMPLETE = 'LOAD_ENTRY_COMPLETE'
+
+export function loadEntry(title) {
     // registry.lookup(key) => entryId[]
     // entryId is stored offchain but let's store everything onchain for now
+    
+    return async (dispatch) => {
+        dispatch({
+            type: LOAD_ENTRY_PROGRESS
+        })
 
+        const key = web3.utils.keccak256(title)
+        // debugger
 
+        console.log(key)
+        let evs = await registry.getPastEvents(
+            'Put',
+            { 
+                filter: {
+                    key
+                },
+                fromBlock: '0',
+                toBlock: 'latest'
+            }
+        )
+
+        const results = evs.map(ev => {
+            const { url, creator, key } = ev.returnValues;
+            return { url, creator, key, total: 0 }
+        })
+
+        dispatch(loadEntryComplete(results))
+    }    
 }
 
+function loadEntryComplete(results) {
+    return {
+        type: LOAD_ENTRY_COMPLETE,
+        results,
+    }
+}
+
+export const LOAD_NEWEST_ENTRIES_COMPLETE = 'LOAD_NEWEST_ENTRIES_COMPLETE'
+
+export function loadNewestEntries() {
+    return async dispatch => {
+        // Ethereum don't support no goddamn string params in events!!!
+
+        // let evs = await registry.getPastEvents(
+        //     'NewEntry',
+        //     {
+        //         fromBlock: '0',
+        //         toBlock: 'latest'
+        //     }
+        // )
+
+        // const results = evs.map(ev => {
+        //     return ev.returnValues.title
+        // })
+
+        // dispatch({
+        //     type: LOAD_NEWEST_ENTRIES_COMPLETE,
+        //     results
+        // })
+    }
+}
 
 function sortEntries(entries) {
     // sort by the EBSL weighted whatever

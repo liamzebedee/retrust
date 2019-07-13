@@ -1,36 +1,28 @@
-import React, { useState } from "react";
+import HomePage from '../components/HomePage'
 import { connect } from 'react-redux'
-import Search from '../components/Search'
-import Entry from '../components/Entry'
+import { loadNewestEntries } from '../actions/registry'
 
-import styled from 'styled-components';
+class HomePageContainer extends React.Component {
+    componentDidMount() {
+        this.props.load()
+    }
 
-
-const AppTitle = styled.h1`
-    text-transform: lowercase;
-    font-family: sans-serif;
-    color: #333;
-    text-decoration: underline;
-`
-const HeaderBar = styled.div`
-    padding: 2em;
-    background: #eee;
-`
-
-
-function Home({ entry }) {
-    return <div>
-        <HeaderBar>
-            <AppTitle>Weeki - a reputation-weighted wiki registry</AppTitle>
-            <Search/>
-        </HeaderBar>
-
-        <Entry {...entry}/>
-    </div>
+    render() {
+        return <HomePage/>
+    }
 }
 
-function mapStateToProps(state, props) {
-    return state;
+
+function mapStateToProps(state, ownProps) {
+    return state
 }
 
-export default connect(mapStateToProps, null)(Home)
+function mapDispatchToProps(dispatch) {
+    return {
+        load: () => {
+            dispatch(loadNewestEntries())
+        }
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(HomePageContainer)
