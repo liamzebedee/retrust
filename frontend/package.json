@@ -5,13 +5,20 @@
         "start": "next start"
     },
     "dependencies": {
-        "next": "^8.1.0",
+        "connected-next-router": "^0.0.7",
+        "connected-react-router": "^6.5.2",
+        "history": "^4.9.0",
+        "next": "9.0.1",
         "normalize.css": "^8.0.1",
         "react": "^16.8.6",
         "react-dom": "^16.8.6",
         "react-redux": "^7.1.0",
+        "react-router": "^5.0.1",
         "redux": "^4.0.1",
-        "styled-components": "^5.0.0-beta.5"
+        "redux-devtools-extension": "^2.13.8",
+        "redux-thunk": "^2.3.0",
+        "styled-components": "^5.0.0-beta.5",
+        "web3": "^1.0.0-beta.55"
     },
     "devDependencies": {
         "babel-plugin-styled-components": "^1.10.2"
