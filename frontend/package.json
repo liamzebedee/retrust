@@ -2,7 +2,8 @@
     "scripts": {
         "dev": "next",
         "build": "next build",
-        "start": "next start"
+        "start": "next start",
+        "export": "next export"
     },
     "dependencies": {
         "connected-next-router": "^0.0.7",
