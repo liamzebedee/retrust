@@ -137,7 +137,7 @@ import Link from 'next/link'
 function Home({ entry, misc }) {
     return <PageTemplate>
         <HeroBlock>
-            <Hero>The unstoppable index.</Hero>
+            <Hero>The unstoppable index. <sup>kovan</sup></Hero>
 
             <CallToAction>
                 <AddAnEntryCTA>
