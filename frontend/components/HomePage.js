@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { connect } from 'react-redux'
 import Search from './Search'
 import Entry from './Entry'
-import Contribute from './Contribute'
 import UserProfile from './UserProfile'
 
 import styled from 'styled-components';
@@ -142,16 +141,16 @@ function Home({ entry, misc }) {
 
             <CallToAction>
                 <AddAnEntryCTA>
-                <Link href="/add-entry">
+                <Link href="/add-link">
                     <Button>
-                        Add an entry
+                        Add a link
                     </Button>
                 </Link>
                 </AddAnEntryCTA>
 
                 <Padding/>
                 <Link href="/entry/Bitcoin: A Peer-to-Peer Electronic Cash System">
-                    <a>See an example <i class="fas fa-arrow-right"></i></a>
+                    <a>See an example <i className="fas fa-arrow-right"></i></a>
                 </Link>
             </CallToAction>
         </HeroBlock>
@@ -160,7 +159,7 @@ function Home({ entry, misc }) {
             <Block>
                 <h2>Uncensorable</h2>
                 <p>
-                    Entries are stored on the <a href="http://ethereum.org/">Ethereum</a> blockchain. Data is hosted in the <a href="https://ipfs.io/">IPFS</a> cloud, 🧲 BitTorrent, you name it. The domain is hosted on ENS. P2P SciHub, anyone?
+                    Entries are stored on the <a href="http://ethereum.org/">Ethereum</a> blockchain. Data is hosted in the <a href="https://ipfs.io/">IPFS</a> cloud, 🧲 BitTorrent, you name it. The domain is hosted on <a href="https://ens.domains/">ENS</a>. P2P SciHub, anyone?
                 </p>
             </Block>
 

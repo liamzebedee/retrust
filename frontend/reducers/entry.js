@@ -1,4 +1,4 @@
-import { LOAD_ENTRY_COMPLETE } from '../actions/registry'
+import { LOAD_ENTRY_PROGRESS, LOAD_ENTRY_COMPLETE } from '../actions/registry'
 
 const initial = {
     title: "",
@@ -7,6 +7,11 @@ const initial = {
 
 function reduce(state = initial, action) {
     switch(action.type) {
+        case LOAD_ENTRY_PROGRESS:
+            return {
+                ...state,
+                title: action.title
+            }
         case LOAD_ENTRY_COMPLETE:
             return {
                 ...state,

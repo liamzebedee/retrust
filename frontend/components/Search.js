@@ -10,8 +10,9 @@ const SearchBox = styled.input`
     padding: 0.25em 0.5em;
 `
 
+
 const Search = ({ dispatch }) => {
-    const [searchQuery, setSearchQuery] = useState('')
+    const [searchQuery, setSearchQuery] = useState()
 
     function onKeyPress(event) {
         if(event.key === 'Enter') {
@@ -30,8 +31,14 @@ const Search = ({ dispatch }) => {
     </div>
 }
 
-function mapStateToProps(state) {
-    return state;
+function mapStateToProps(state, ownProps) {
+    return {
+        // prefilledSearchQuery: state.entry.title || ''
+    }
 }
 
-export default connect(mapStateToProps)(Search)
+function mapDispatchToProps(dispatch, ownProps) {
+    return {}
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Search)

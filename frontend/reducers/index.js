@@ -47,12 +47,35 @@ function misc(state = { newestEntries: [] }, action) {
     }
 }
 
+import { LOAD_ENTRY_PROGRESS, LOAD_ENTRY_COMPLETE } from '../actions/registry'
+import { LOAD_USER_PROGRESS, LOAD_USER_COMPLETE } from '../actions/users'
+
+function loading(state = false, action) {
+    switch(action.type) {
+        case LOAD_ENTRY_PROGRESS:
+        case LOAD_USER_PROGRESS:
+            return true;
+        case LOAD_ENTRY_COMPLETE:
+        case LOAD_USER_COMPLETE:
+            return false;
+        default:
+            return false;
+    }
+}
+
 import entry from './entry'
+import users from './users'
+import registry from './registry'
+import txs from './txs'
 
 import { combineReducers } from 'redux'
 
 export default combineReducers({
     user,
     entry,
-    misc
+    misc,
+    users,
+    loading,
+    registry,
+    txs
 })

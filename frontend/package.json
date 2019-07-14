@@ -8,6 +8,8 @@
         "connected-next-router": "^0.0.7",
         "connected-react-router": "^6.5.2",
         "history": "^4.9.0",
+        "luxon": "^1.17.1",
+        "moment": "^2.24.0",
         "next": "9.0.1",
         "normalize.css": "^8.0.1",
         "react": "^16.8.6",

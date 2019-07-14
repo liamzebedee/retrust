@@ -1,6 +1,11 @@
 import Web3 from 'web3'
-const web3 = new Web3('http://localhost:8545' , null, {});
+
+// const web3 = new Web3('http://localhost:8545' , null, { });
 // || Web3.givenProvider
+
+// Metamask automatically does gas estimation for us
+// Make sure to connect to local Ganache instance at http://localhost:8545
+const web3 = new Web3(Web3.givenProvider, null, {})
 
 // const { readFileSync } = require('fs')
 
@@ -18,7 +23,8 @@ export function loadEntry(title) {
     
     return async (dispatch) => {
         dispatch({
-            type: LOAD_ENTRY_PROGRESS
+            type: LOAD_ENTRY_PROGRESS,
+            title
         })
 
         const key = web3.utils.keccak256(title)
@@ -37,8 +43,8 @@ export function loadEntry(title) {
         )
 
         const results = evs.map(ev => {
-            const { url, creator, key } = ev.returnValues;
-            return { url, creator, key, total: 0 }
+            const { url, creator, key, time } = ev.returnValues;
+            return { url, creator, key, total: 0, time: time.toNumber() }
         })
 
         dispatch(loadEntryComplete(results))
@@ -86,4 +92,29 @@ function sortEntries(entries) {
     // which is probably why it's best to update this matrix on chain from time to time 
     // so we can just call it and the node's already know
     
+}
+
+import { trackTx } from './txs'
+
+export const ADD_TO_REGISTRY_PROGRESS = 'ADD_TO_REGISTRY_PROGRESS'
+
+export function addToRegistry(title, url) {
+    return async (dispatch) => {
+        dispatch({
+            type: ADD_TO_REGISTRY_PROGRESS,
+            txhash: null
+        })
+
+        const accounts = await web3.eth.getAccounts()
+        let ev = registry.methods.put(title, url).send({ from: accounts[0] })
+
+        ev.on('transactionHash', txhash => {
+            dispatch({
+                type: ADD_TO_REGISTRY_PROGRESS,
+                txhash
+            })
+            
+            dispatch(trackTx(ev, txhash))
+        })        
+    }
 }

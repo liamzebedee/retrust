@@ -12,7 +12,7 @@ const Style = styled.div`
 
 const UserProfile = ({ dispatch, user }) => {
     return <Style>
-        {user.username} ({user.reputation})
+        <a href={`/user/${user.username}`}>{user.username}</a> ({user.reputation})
     </Style>
 }
 
