@@ -1,3 +1,10 @@
+import { web3 } from '../web3'
+
+const memberNft = new web3.eth.Contract(
+    require('../chain/MemberNFT.json'),
+    require('../chain/MemberNFT.js')
+)
+
 const LOAD_USER = 'LOAD_USER'
 
 export const LOAD_USER_PROGRESS = 'LOAD_USER_PROGRESS'
@@ -8,6 +15,8 @@ export function loadUser(id) {
         dispatch({
             type: LOAD_USER_PROGRESS
         })
+
+        
         // load all posts user has made
         // load all votes user has made
         // load when user registered

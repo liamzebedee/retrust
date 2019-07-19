@@ -19,4 +19,12 @@ export REGISTRY=$(seth send --create $(cat ../out/Registry.bin) --status 2>/dev/
 echo -n $REGISTRY > Registry
 echo -n "module.exports = '$REGISTRY'" > Registry.js
 
-cp ../out/Registry.abi ../out/Registry.json
+export GUACTOKEN=$(seth send --create $(cat ../out/GUACToken.bin) --status 2>/dev/null)
+echo -n $GUACTOKEN > GUACToken
+echo -n "module.exports = '$GUACTOKEN'" > GUACToken.js
+
+export MEMBERNFT=$(seth send --create $(cat ../out/MemberNFT.bin) "(address)" $GUACTOKEN --status 2>/dev/null)
+echo -n $MEMBERNFT > MemberNFT
+echo -n "module.exports = '$MEMBERNFT'" > MemberNFT.js
+
+seth send $GUACTOKEN "setup(address)()" $MEMBERNFT --status 2>/dev/null

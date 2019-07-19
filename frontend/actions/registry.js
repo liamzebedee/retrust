@@ -1,17 +1,8 @@
-import Web3 from 'web3'
-
-// const web3 = new Web3('http://localhost:8545' , null, { });
-// || Web3.givenProvider
-
-// Metamask automatically does gas estimation for us
-// Make sure to connect to local Ganache instance at http://localhost:8545
-const web3 = new Web3(Web3.givenProvider, null, {})
-
-// const { readFileSync } = require('fs')
+import { web3 } from '../web3'
 
 const registry = new web3.eth.Contract(
-    require('../../contracts/out/Registry.json'),
-    require('../../contracts/deploy/Registry.js')
+    require('../chain/Registry.json'),
+    require('../chain/Registry.js')
 )
 
 export const LOAD_ENTRY_PROGRESS = 'LOAD_ENTRY_PROGRESS'

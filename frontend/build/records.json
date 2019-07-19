@@ -1,0 +1,41 @@
+{
+  "modules": {
+    "byIdentifier": {
+      "ignored node_modules/readable-stream/lib util": 0,
+      "ignored node_modules/readable-stream/lib/internal/streams util": 1,
+      "ignored node_modules/bn.js/lib buffer": 2,
+      "ignored node_modules/brorand crypto": 3
+    },
+    "usedIds": {
+      "0": 0,
+      "1": 1,
+      "2": 2,
+      "3": 3
+    }
+  },
+  "chunks": {
+    "byName": {
+      "commons": 0,
+      "static/runtime/webpack.js": 1,
+      "static/LfKNPXNvhXuBqL4IhkSi-/pages/_app.js": 2,
+      "static/LfKNPXNvhXuBqL4IhkSi-/pages/_error.js": 3,
+      "static/LfKNPXNvhXuBqL4IhkSi-/pages/add-link.js": 4,
+      "static/LfKNPXNvhXuBqL4IhkSi-/pages/entry/[title].js": 5,
+      "static/LfKNPXNvhXuBqL4IhkSi-/pages/index.js": 6,
+      "static/LfKNPXNvhXuBqL4IhkSi-/pages/user/[id].js": 7,
+      "static/runtime/main.js": 8
+    },
+    "bySource": {},
+    "usedIds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8
+    ]
+  }
+}

@@ -1,0 +1,1 @@
+{"ast":null,"code":"import styled from 'styled-components';\nvar Button = styled.button.withConfig({\n  displayName: \"Button\",\n  componentId: \"sc-6z615l-0\"\n})([\"border-radius:1px;padding:0.5em;:hover{cursor:pointer;background:#eee;color:black;border-color:1px solid black;}\"]);\nexport default Button;","map":null,"metadata":{},"sourceType":"module"}

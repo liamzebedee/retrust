@@ -1,0 +1,1 @@
+{"ast":null,"code":"export var SEARCH = 'search';\nexport function search(query) {\n  return {\n    type: SEARCH,\n    query: query\n  };\n}","map":null,"metadata":{},"sourceType":"module"}

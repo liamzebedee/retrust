@@ -1,6 +1,7 @@
 {
   "devFiles": [
-    "static/development/dll/dll_aa8f31c0c93a8f34edc5.js"
+    "static/development/dll/dll_92fa9139568d8c3d8f78.js",
+    "static/development/dll/dll_92fa9139568d8c3d8f78.js.map"
   ],
   "pages": {
     "/": [
@@ -16,6 +17,10 @@
       "static/runtime/main.js"
     ],
     "/index": [
+      "static/runtime/webpack.js",
+      "static/runtime/main.js"
+    ],
+    "/user/[id]": [
       "static/runtime/webpack.js",
       "static/runtime/main.js"
     ]
