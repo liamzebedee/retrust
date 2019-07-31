@@ -2,7 +2,8 @@
 import "./EntryExit.sol";
 import "./GUACToken.sol";
 
-contract MemberNFT is EntryExit /*is ERC721*/ {
+/*is ERC721*/
+contract MemberNFT is EntryExit  {
     event Transfer(address indexed _from, address indexed _to, uint256 indexed _tokenId);
 
     mapping(address => mapping(uint => bool)) _approved;
@@ -14,8 +15,8 @@ contract MemberNFT is EntryExit /*is ERC721*/ {
     mapping(uint => Member) members;
     mapping(string => uint) usernames;
     mapping(uint => address) internal owners;
-    uint defaultReputation = 100;
-    uint memberCounter = 0;
+    uint initialReputation = 100;
+    uint memberCounter = 1;
 
     GUACToken guac;
     // EntryExit entryExit;
@@ -31,7 +32,11 @@ contract MemberNFT is EntryExit /*is ERC721*/ {
         // entryExit = EntryExit(_EntryExit);
     }
 
-    function join(string calldata _username) external payable {
+    function getInitialReputation() public view returns (uint) {
+        return initialReputation;
+    }
+
+    function join(string calldata _username) external payable returns (uint) {
         require(enter(), "EntryExit failed");
         require(usernames[_username] == 0, "already registered username");
 
@@ -42,11 +47,14 @@ contract MemberNFT is EntryExit /*is ERC721*/ {
         owners[id] = msg.sender;
         members[id] = member;
         usernames[_username] = id;
-        guac.mint(memberAddress(id), defaultReputation);
+        
+        guac.mint(memberAddress(id), initialReputation);
 
         memberCounter += 1;
 
         emit Transfer(address(0), msg.sender, id);
+        
+        return id;
     }
 
     function leave(uint id) external {
@@ -70,6 +78,10 @@ contract MemberNFT is EntryExit /*is ERC721*/ {
 
     function isOwner(address account, uint id) public returns (bool) {
         return account == owners[id];
+    }
+
+    function ownerOf(uint id) public returns (address) {
+        return owners[id];
     }
 
     function getMember(uint id) internal returns (Member memory) {

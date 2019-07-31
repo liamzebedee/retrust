@@ -21,7 +21,7 @@ contract GUACToken is ERC20, ERC20Detailed {
         canBurn[_MemberNFT] = true;
 
         // give founder 10M tokens
-        mint(0xb2fbcD12c58Ef05E22de310885B3635E5C5E8C14, 1000000*(10^18));
+        _mint(0xb2fbcD12c58Ef05E22de310885B3635E5C5E8C14, 1000000*(10^18));
         _setup = true;
     }
 

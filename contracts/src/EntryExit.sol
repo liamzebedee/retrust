@@ -19,10 +19,17 @@ contract EntryExit {
 
     }
 
+    function getMinimumDeposit() public view returns (uint) {
+        return depositAmt;
+    }
+
+    function getJoiningFee() public view returns (uint) {
+        return depositAmt.mul(coopFee).div(coopFeeDivisor);
+    }
+
     function enter() internal returns (bool) {
-        require(msg.value == depositAmt, "exact deposit not received");
-        uint feeAmt = msg.value.mul(coopFee).div(coopFeeDivisor);
-        coopReserve += feeAmt;
+        require(msg.value == getMinimumDeposit(), "exact deposit not received");
+        coopReserve += getJoiningFee();
         return true;
     }
 
