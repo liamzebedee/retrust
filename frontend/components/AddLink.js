@@ -46,14 +46,16 @@ const URLInput = styled.input`
     height: 75px;
 `
 
-function AddLink({ submit, txhash }) {
+function AddLink(props) {
+    const { userId, submit, txhash } = props
+    
     let [title, setTitle] = useState()
     let [url, setUrl] = useState()
     let [submitted, setSubmitted] = useState(false)
 
     function startSubmit() {
         setSubmitted(true)
-        submit(title, url)
+        submit(userId, title, url)
     }
 
     return <PageTemplate>

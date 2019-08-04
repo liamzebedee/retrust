@@ -2,13 +2,13 @@ import React, { useState, useEffect } from "react"
 import { connect } from 'react-redux'
 import User from './User'
 import { useRouter } from 'next/router'
-import { loadUser } from '../actions/users'
+import { loadUser, loadUserForUsername } from '../actions/users'
 import { getUser } from "../selectors";
 import { bindActionCreators } from "redux";
 
 class UserContainer extends React.Component {
     componentDidMount() {
-        this.props.loadUser(this.props.id)
+        this.props.loadUserForUsername(this.props.username)
     }
 
     render() {
@@ -17,7 +17,7 @@ class UserContainer extends React.Component {
 }
 
 function mapStateToProps(state, ownProps) {
-    let user = getUser(state, ownProps.id)
+    let user = getUser(state, ownProps.username)
     return {
         user
     }
@@ -26,7 +26,7 @@ function mapStateToProps(state, ownProps) {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators(
         {
-            loadUser
+            loadUserForUsername
         },
         dispatch
     )

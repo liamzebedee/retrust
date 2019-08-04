@@ -7,6 +7,8 @@ import Link from 'next/link'
 
 import styled from 'styled-components';
 import UserSelector from "./UserSelector";
+import { loggedInUser, isLoggedIn } from '../../selectors'
+import { loadAccounts } from "../../actions/users";
 const UserProfileBox = styled.input``
 
 const Style = styled.div`
@@ -16,7 +18,10 @@ const Style = styled.div`
 
 class UserProfile extends React.Component {
     componentDidMount() {
-        this.props.loadUser()
+        // this.props.loadUser()
+        if(!this.props.loggedIn) {
+            this.props.loadAccounts()
+        }
     }
 
     render() {
@@ -42,8 +47,6 @@ const LoggedIn = ({ user }) => {
     </Style>
 }
 
-import { loggedInUser, isLoggedIn } from '../../selectors'
-import { loadUser } from "../../actions/users";
 
 function mapStateToProps(state, ownProps) {
     const loggedIn = isLoggedIn(state)
@@ -60,7 +63,8 @@ function mapStateToProps(state, ownProps) {
 function mapDispatchToProps(dispatch, ownProps) {
     return bindActionCreators(
         {
-            loadUser
+            // loadUser,
+            loadAccounts
         },
         dispatch
     )

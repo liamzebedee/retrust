@@ -6,9 +6,13 @@ const initial = {
 function reduce(state = initial, action) {
     switch(action.type) {
         case LOAD_USER_COMPLETE:
+            
             return {
                 ...state,
-                [action.user.id]: action.user
+                [action.user.id]: {
+                    ...state[action.user.id],
+                    ...action.user
+                }
             }
         default:
             return state

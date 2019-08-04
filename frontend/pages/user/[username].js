@@ -7,10 +7,10 @@ import { useRouter } from 'next/router'
 
 function UserPage({ load }) {  
     const router = useRouter()
-    const { id } = router.query
+    const { username } = router.query
 
     const user = {
-        id
+        username
     }
 
     return <PageTemplate>

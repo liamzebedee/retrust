@@ -24,7 +24,7 @@ export function loadEntry(title) {
         console.log(key)
         let evs = await registry.getPastEvents(
             'Put',
-            { 
+            {
                 filter: {
                     key
                 },
@@ -35,12 +35,21 @@ export function loadEntry(title) {
 
         const results = evs.map(ev => {
             const { url, creator, key, time } = ev.returnValues;
-            return { url, creator, key, total: 0, time: time.toNumber() }
+            
+            dispatch(loadUserInfo(creator))
+
+            return { 
+                url, 
+                creatorId: creator.toString(), 
+                key, total: 0, time: time.toNumber() 
+            }
         })
+
 
         dispatch(loadEntryComplete(results))
     }    
 }
+
 
 function loadEntryComplete(results) {
     return {
@@ -86,10 +95,11 @@ function sortEntries(entries) {
 }
 
 import { trackTx } from './txs'
+import { loadUserInfo } from './users';
 
 export const ADD_TO_REGISTRY_PROGRESS = 'ADD_TO_REGISTRY_PROGRESS'
 
-export function addToRegistry(title, url) {
+export function addToRegistry(userId, title, url) {
     return async (dispatch) => {
         dispatch({
             type: ADD_TO_REGISTRY_PROGRESS,
@@ -97,7 +107,7 @@ export function addToRegistry(title, url) {
         })
 
         const accounts = await web3.eth.getAccounts()
-        let ev = registry.methods.put(title, url).send({ from: accounts[0] })
+        let ev = registry.methods.put(userId, title, url).send({ from: accounts[0] })
 
         ev.on('transactionHash', txhash => {
             dispatch({

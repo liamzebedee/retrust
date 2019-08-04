@@ -9,15 +9,17 @@ function AddLinkContainer(props) {
 }
 
 function mapStateToProps(state, props) {
+    const userId = state.user.loggedInUserId
     return {
-        txhash: state.registry.addToRegistry
+        txhash: state.registry.addToRegistry,
+        userId,
     }
 }
 
 function mapDispatchToProps(dispatch, ownProps) {
     return {
-        submit: (title, url) => {
-            dispatch(addToRegistry(title, url))
+        submit: (userId, title, url) => {
+            dispatch(addToRegistry(userId, title, url))
         }
     }
 }

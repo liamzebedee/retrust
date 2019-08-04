@@ -31,7 +31,7 @@ export function loginUser(id) {
     }
 }
 
-export async function loadUserInfo(id) {
+export async function getUserInfo(id) {
     let data = await memberNft.methods.getData(id).call()
     let [ username, reputation ] = tupleToArray(data)
     reputation = reputation.toString()
@@ -41,6 +41,49 @@ export async function loadUserInfo(id) {
     }
 }
 
+export function loadUserInfo(id) {
+    return async dispatch => {
+        const userInfo = await getUserInfo(id)
+        dispatch({
+            type: LOAD_USER_COMPLETE,
+            user: {
+                id: id.toString(),
+                ...userInfo
+            }
+        })
+    }
+}
+
+import BN from 'bn.js'
+
+export function loadUserForUsername(username) {
+    return async dispatch => {
+        let userId = await memberNft.methods.usernames(username).call()
+        if(!userId) throw new Error('user not found')
+        dispatch(loadUser(userId))
+    }
+}
+
+export function loadAccounts() {
+    return async dispatch => {
+        const accounts = await web3.eth.getAccounts()
+        const evs = await memberNft.getPastEvents(
+            'Transfer', 
+            {
+                filter: {
+                    from: '0x'+'0'.repeat(40),
+                    to: accounts[0]
+                },
+                fromBlock: '0'
+            }
+        )
+
+        evs.map(ev => {
+            const userId = ev.returnValues._tokenId
+            dispatch(loadUser(userId))
+        })
+    }
+}
 
 export function loadUser(id) {
     return async dispatch => {
@@ -49,13 +92,14 @@ export function loadUser(id) {
         })
 
         const accounts = await web3.eth.getAccounts()
+        const owner = await memberNft.methods.ownerOf(id).call()
 
         const evs = await memberNft.getPastEvents(
             'Transfer', 
             {
                 filter: {
                     from: '0x'+'0'.repeat(40),
-                    to: accounts[0]
+                    to: owner
                 },
                 fromBlock: '0'
             }
@@ -74,7 +118,7 @@ export function loadUser(id) {
         let block = await web3.eth.getBlock(ev.blockHash)
         const userId = ev.returnValues._tokenId
 
-        let userInfo = await loadUserInfo(userId)
+        let userInfo = await getUserInfo(userId)
         
 
         dispatch({

@@ -9,6 +9,10 @@ export function getUsersAvailable(state) {
     // TODO
 }
 
+export function getUserById(state, id) {
+    return state.users[id]
+}
+
 export function getUser(state, username) {
     for(let user of Object.values(state.users)) {
         if(user.username == username) return user;
