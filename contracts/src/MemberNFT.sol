@@ -6,19 +6,19 @@ import "./GUACToken.sol";
 contract MemberNFT is EntryExit  {
     event Transfer(address indexed _from, address indexed _to, uint256 indexed _tokenId);
 
-    mapping(address => mapping(uint => bool)) _approved;
+    mapping(address => mapping(uint => bool)) public _approved;
 
     struct Member {
         string username;
     }
 
-    mapping(uint => Member) members;
-    mapping(string => uint) usernames;
-    mapping(uint => address) internal owners;
-    uint initialReputation = 100;
-    uint memberCounter = 1;
+    mapping(uint => Member) public members;
+    mapping(string => uint) public usernames;
+    mapping(uint => address) public owners;
+    uint public initialReputation = 100;
+    uint public memberCounter = 1;
 
-    GUACToken guac;
+    GUACToken public guac;
     // EntryExit entryExit;
 
     constructor(

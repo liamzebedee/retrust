@@ -9,6 +9,7 @@ contract GUACToken is ERC20, ERC20Detailed {
 
     constructor(
     )
+        ERC20()
         ERC20Detailed("GUAC", "Guac", 18)
         public
     {

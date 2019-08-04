@@ -1,5 +1,5 @@
 #!/bin/bash
-./deploy.sh
+# ./deploy.sh
 
 source ./deploy/deployments.env.sh
 echo -n "module.exports = '$REGISTRY'" > ../frontend/chain/Registry.js
