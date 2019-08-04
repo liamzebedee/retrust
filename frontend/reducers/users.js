@@ -1,4 +1,4 @@
-import { LOAD_USER_COMPLETE } from '../actions/users'
+import { LOAD_USER_COMPLETE, LOGIN_USER } from '../actions/users'
 
 const initial = {
 }

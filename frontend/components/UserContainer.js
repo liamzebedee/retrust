@@ -3,37 +3,33 @@ import { connect } from 'react-redux'
 import User from './User'
 import { useRouter } from 'next/router'
 import { loadUser } from '../actions/users'
+import { getUser } from "../selectors";
+import { bindActionCreators } from "redux";
 
 class UserContainer extends React.Component {
     componentDidMount() {
-        const { load, id } = this.props
-        load(id)
+        this.props.loadUser(this.props.id)
     }
 
     render() {
-        return <User {...this.props}/>
+        return this.props.user !== null ? <User {...this.props.user}/> : 'Loading'
     }
 }
 
 function mapStateToProps(state, ownProps) {
-    const user = state.users[ownProps.id]
-    
+    let user = getUser(state, ownProps.id)
     return {
-        reputation: 1,
-        registered: null,
-        posts: [],
-        votes: [],
-        ...user,
-        id: ownProps.id,
+        user
     }
 }
 
 function mapDispatchToProps(dispatch) {
-    return {
-        load: (id) => {
-            dispatch(loadUser(id))
-        }
-    }
+    return bindActionCreators(
+        {
+            loadUser
+        },
+        dispatch
+    )
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(UserContainer)

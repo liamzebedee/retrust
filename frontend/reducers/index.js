@@ -28,10 +28,6 @@ const initial = {
     user: mockUser
 }
 
-function user(state = {}, action) {
-    return mockUser
-}
-
 import { LOAD_NEWEST_ENTRIES_COMPLETE } from '../actions/registry'
 
 
@@ -48,7 +44,7 @@ function misc(state = { newestEntries: [] }, action) {
 }
 
 import { LOAD_ENTRY_PROGRESS, LOAD_ENTRY_COMPLETE } from '../actions/registry'
-import { LOAD_USER_PROGRESS, LOAD_USER_COMPLETE } from '../actions/users'
+import { LOAD_USER_PROGRESS, LOAD_USER_COMPLETE, LOGIN_USER } from '../actions/users'
 
 function loading(state = false, action) {
     switch(action.type) {
@@ -67,6 +63,7 @@ import entry from './entry'
 import users from './users'
 import registry from './registry'
 import txs from './txs'
+import user from './user'
 
 import { combineReducers } from 'redux'
 

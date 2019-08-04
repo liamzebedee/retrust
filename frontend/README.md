@@ -154,7 +154,7 @@ https://github.com/commons-stack/genesis-contracts/blob/master/contracts/bonding
 https://dzone.com/articles/harberger-taxes-on-ethereum
 
 
-
+https://ethresear.ch/t/erc20-backward-compatible-gas-abstraction-using-constantinoples-eip-1014/4798
 
 
 a brief plan:
@@ -192,4 +192,53 @@ ie. uniswap pool, provide X% of power in return for growth
 
 
 
+
+What is the goal?
+
+to be able to get access to any stream for something
+
+how can we do this?
+- uncensorable decentralised registry
+- mitigating sybil spam by reputation mechanisms
+- integrating streaming 
+- integrating paid-for requests (papers, shows, etc.)
+- building in moderation tools
+
+
+what are unresolved challenges?
+- metamask tx for every vote = shit
+- UX of querying index: autocomplete (wanted), showing recent entries (desired)
+
+
+brainstorming:
+- use meta transactions for users (eh)
+- pay for all user transactions initially (eh2)
+- put it all on SSB and have a trusted relayer summarise (eh3)    https://github.com/ssb-junkyard/ssb-feed
+- own private ganache chain 
+- loom sidechain
+- some other L2 shit
+
+what's best for ux?
+- moderators: just do your job
+- uploaders: also just do my job
+
+so let's require metamask at a minimum and go with it
+
+
+
+
+
+
+
+
+how can we build this UI?
+the index
+
+what can we do about the content? 
+
+
+
+what if we have different stations
+ie. request station - where you can make a request
+ie. stream station - where you can ask for a stream
 

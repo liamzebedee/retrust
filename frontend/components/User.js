@@ -9,11 +9,11 @@ const UserStyle = styled.div`
 `
 
 
-function User({ id, reputation, registered, posts, votes }) {
+function User({ id, username, reputation, registered, posts, votes }) {
     return <UserStyle>
-        <h2>User profile: {id}</h2>
+        <h2>User: {username}</h2>
         <h3>Reputation: {reputation}</h3>
-        <small>Registered {""+registered}</small>
+        <small>Registered {""+registered}, user #{id}</small>
         <h2>Posts</h2>
         <ul>
             {posts.map(post => {

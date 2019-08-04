@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { connect } from 'react-redux'
 import Search from './Search'
 import Entry from './Entry'
-import UserProfile from './UserProfile'
 
 import styled from 'styled-components';
 import PageTemplate from "./PageTemplate";

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { connect } from 'react-redux'
 import Search from '../components/Search'
 import Entry from '../components/Entry'
-import UserProfile from '../components/UserProfile'
+import UserProfile from '../components/atoms/UserProfile'
 
 import styled from 'styled-components';
 
@@ -81,6 +81,14 @@ const LoadingBar = styled.div`
   }
 `
 
+const Style = styled.div`
+html {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+}
+`
+
 import { useRouter } from 'next/router'
 import { withRouter } from 'next/router'
 import Link from 'next/link'
@@ -98,7 +106,7 @@ function Home({ children, loading }) {
     //     }
     // }, [loading])
 
-    return <div>
+    return <Style>
         <HeaderBar>
             
             <ColL>
@@ -119,7 +127,7 @@ function Home({ children, loading }) {
         {/* <LoadingBar className={loading && 'loading'}/> */}
 
         {children}
-    </div>
+    </Style>
 }
 
 function mapStateToProps(state, props) {
