@@ -1,9 +1,11 @@
 #!/bin/bash
+./deploy.sh
 
-DIR=`pwd`
-cd deploy && ./deploy1.sh
+source ./deploy/deployments.env.sh
+echo -n "module.exports = '$REGISTRY'" > ../frontend/chain/Registry.js
+echo -n "module.exports = '$GUACTOKEN'" > ../frontend/chain/GUACToken.js
+echo -n "module.exports = '$MEMBERNFT'" > ../frontend/chain/MemberNFT.js
 
-cd $DIR
-cp ./deploy/GUACToken.js ../frontend/chain/GUACToken.js
-cp ./deploy/MemberNFT.js ../frontend/chain/MemberNFT.js
-cp ./deploy/Registry.js ../frontend/chain/Registry.js
+cp ./out/GUACToken.abi ../frontend/chain/GUACToken.json
+cp ./out/MemberNFT.abi ../frontend/chain/MemberNFT.json
+cp ./out/Registry.abi ../frontend/chain/Registry.json
