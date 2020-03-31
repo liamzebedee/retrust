@@ -10,7 +10,7 @@
         "history": "^4.9.0",
         "luxon": "^1.17.1",
         "moment": "^2.24.0",
-        "next": "9.0.1",
+        "next": "9.3.2",
         "normalize.css": "^8.0.1",
         "react": "^16.8.6",
         "react-dom": "^16.8.6",
